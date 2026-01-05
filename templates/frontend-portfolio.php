@@ -115,14 +115,3 @@ $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table
         <div id="project-details-container"></div>
     </div>
 </div>
-
-<script>
-jQuery(document).ready(function($) {
-    // Close modal on close button or background click
-    $(document).on('click', '#project-details-modal .modal-close, #project-details-modal', function(e) {
-        if (e.target === $('#project-details-modal')[0] || $(e.target).hasClass('modal-close')) {
-            $('#project-details-modal').fadeOut();
-        }
-    });
-});
-</script>
