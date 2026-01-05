@@ -7,10 +7,16 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb;
-$database = new Portfolio_Database();
-$total_projects = $wpdb->get_var("SELECT COUNT(*) FROM {$database->get_table_name()}");
-$total_categories = $wpdb->get_var("SELECT COUNT(*) FROM {$database->get_categories_table()}");
+global $wpdb, $portfolio_database;
+
+$total_projects   = 0;
+$total_categories = 0;
+
+if ( isset( $portfolio_database ) && $portfolio_database instanceof Portfolio_Database ) {
+    $database         = $portfolio_database;
+    $total_projects   = $wpdb->get_var( "SELECT COUNT(*) FROM {$database->get_table_name()}" );
+    $total_categories = $wpdb->get_var( "SELECT COUNT(*) FROM {$database->get_categories_table()}" );
+}
 ?>
 
 <div class="wrap portfolio-admin">
