@@ -73,7 +73,6 @@ class Portfolio_Database {
      * Get table name (escaped for SQL)
      */
     public function get_table_name() {
-        global $wpdb;
         return esc_sql($this->table_name);
     }
     
@@ -81,7 +80,6 @@ class Portfolio_Database {
      * Get categories table name (escaped for SQL)
      */
     public function get_categories_table() {
-        global $wpdb;
         return esc_sql($this->categories_table);
     }
 }
