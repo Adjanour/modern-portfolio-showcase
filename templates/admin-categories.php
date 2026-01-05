@@ -8,8 +8,17 @@
 if (!defined('ABSPATH')) exit;
 
 global $wpdb;
-$database = new Portfolio_Database();
-$categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY created_at DESC");
+
+// Prefer categories provided by the calling code; fall back to querying here if not set.
+if (!isset($categories)) {
+    if (class_exists('Portfolio_Database')) {
+        $database   = new Portfolio_Database();
+        $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY created_at DESC");
+    } else {
+        // If Portfolio_Database is unavailable, use an empty list to avoid errors.
+        $categories = array();
+    }
+}
 ?>
 
 <div class="wrap portfolio-admin">
