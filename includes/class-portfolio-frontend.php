@@ -49,13 +49,17 @@ class Portfolio_Frontend {
     
     /**
      * Helper function to truncate text
+     * 
+     * @param string $text Text to truncate
+     * @param int $word_limit Maximum number of words (not characters)
+     * @return string Truncated text
      */
-    public function truncate_text($text, $length = 150) {
+    public function truncate_text($text, $word_limit = 150) {
         $text = wp_strip_all_tags($text);
         $words = explode(' ', $text);
         
-        if (count($words) > $length) {
-            $words = array_slice($words, 0, $length);
+        if (count($words) > $word_limit) {
+            $words = array_slice($words, 0, $word_limit);
             $text = implode(' ', $words) . '...';
         }
         
