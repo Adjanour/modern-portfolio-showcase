@@ -48,7 +48,7 @@ $projects = $wpdb->get_results(
                                 }
                                 ?>
                             </td>
-                            <td><?php echo date('M d, Y', strtotime($project->created_at)); ?></td>
+                            <td><?php echo esc_html( date_i18n( 'M d, Y', strtotime( $project->created_at ) ) ); ?></td>
                             <td>
                                 <a href="<?php echo admin_url('admin.php?page=modern-portfolio-projects&edit=' . $project->id); ?>" class="button button-small">Edit</a>
                                 <button class="button button-small button-link-delete delete-project-btn" data-id="<?php echo $project->id; ?>">Delete</button>
