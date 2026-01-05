@@ -43,6 +43,10 @@ class Portfolio_Frontend {
      */
     public function portfolio_shortcode() {
         ob_start();
+        
+        // Make the injected database instance available to the template
+        $database = $this->database;
+        
         include dirname(dirname(__FILE__)) . '/templates/frontend-portfolio.php';
         return ob_get_clean();
     }
