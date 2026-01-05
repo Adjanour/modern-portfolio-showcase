@@ -8,7 +8,6 @@
 if (!defined('ABSPATH')) exit;
 
 global $wpdb;
-$database = new Portfolio_Database();
 $project = null;
 
 $edit_id = isset($_GET['edit']) ? sanitize_text_field($_GET['edit']) : 0;
