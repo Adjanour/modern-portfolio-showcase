@@ -28,8 +28,14 @@ $items = $wpdb->get_results(
      LEFT JOIN {$database->get_categories_table()} c ON p.category_id = c.id 
      ORDER BY p.created_at DESC"
 );
+if (!is_array($items)) {
+    $items = array();
+}
 
 $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY name ASC");
+if (!is_array($categories)) {
+    $categories = array();
+}
 ?>
 
 <div class="modern-portfolio-container">
