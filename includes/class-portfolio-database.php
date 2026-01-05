@@ -53,7 +53,19 @@ class Portfolio_Database {
         $column_names = wp_list_pluck($columns, 'Field');
         
         if (!in_array('category_id', $column_names)) {
-            $wpdb->query("ALTER TABLE {$this->table_name} ADD COLUMN category_id mediumint(9)");
+            $alter_sql = "ALTER TABLE {$this->table_name} ADD COLUMN category_id mediumint(9)";
+            $result    = $wpdb->query($alter_sql);
+
+            if ($result === false) {
+                error_log(
+                    sprintf(
+                        'Portfolio_Database: Failed to execute schema update "%s" on table "%s": %s',
+                        $alter_sql,
+                        $this->table_name,
+                        $wpdb->last_error
+                    )
+                );
+            }
         }
     }
     
