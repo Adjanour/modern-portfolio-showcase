@@ -7,10 +7,21 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb;
-$database = new Portfolio_Database();
-$frontend = new Portfolio_Frontend($database);
+global $wpdb, $portfolio_database, $portfolio_frontend;
 
+// Use injected or global Portfolio_Database instance instead of creating a new one.
+if (isset($database) && $database instanceof Portfolio_Database) {
+    // $database was provided by the including context.
+} elseif (isset($portfolio_database) && $portfolio_database instanceof Portfolio_Database) {
+    $database = $portfolio_database;
+}
+
+// Use injected or global Portfolio_Frontend instance instead of creating a new one.
+if (isset($frontend) && $frontend instanceof Portfolio_Frontend) {
+    // $frontend was provided by the including context.
+} elseif (isset($portfolio_frontend) && $portfolio_frontend instanceof Portfolio_Frontend) {
+    $frontend = $portfolio_frontend;
+}
 $items = $wpdb->get_results(
     "SELECT p.*, c.name as category_name, c.slug as category_slug 
      FROM {$database->get_table_name()} p 
