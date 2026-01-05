@@ -151,9 +151,30 @@ class Portfolio_Ajax {
         );
         
         if ($category_id > 0) {
-            $wpdb->update($categories_table, $data, array('id' => $category_id));
+            // Ensure slug is unique for updates as well
+            $existing = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT id FROM {$categories_table} WHERE slug = %s AND id != %d",
+                    $slug,
+                    $category_id
+                )
+            );
+            if ($existing) {
+                wp_send_json_error('Slug already exists');
+            }
+
+            $result = $wpdb->update($categories_table, $data, array('id' => $category_id));
+
+            if ($result === false) {
+                wp_send_json_error('Failed to update category');
+            }
+
+            $message = ($result === 0)
+                ? 'No changes made to category'
+                : 'Category updated successfully';
+
             wp_send_json_success(array(
-                'message' => 'Category updated successfully', 
+                'message' => $message,
                 'category' => $wpdb->get_row($wpdb->prepare("SELECT * FROM {$categories_table} WHERE id = %d", $category_id))
             ));
         } else {
