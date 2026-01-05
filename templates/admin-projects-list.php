@@ -8,7 +8,7 @@
 if (!defined('ABSPATH')) exit;
 
 global $wpdb;
-$database = new Portfolio_Database();
+$database = Portfolio_Database::get_instance();
 $projects = $wpdb->get_results(
     "SELECT p.*, c.name as category_name 
      FROM {$database->get_table_name()} p 
