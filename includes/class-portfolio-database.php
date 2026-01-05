@@ -70,16 +70,18 @@ class Portfolio_Database {
     }
     
     /**
-     * Get table name
+     * Get table name (escaped for SQL)
      */
     public function get_table_name() {
-        return $this->table_name;
+        global $wpdb;
+        return esc_sql($this->table_name);
     }
     
     /**
-     * Get categories table name
+     * Get categories table name (escaped for SQL)
      */
     public function get_categories_table() {
-        return $this->categories_table;
+        global $wpdb;
+        return esc_sql($this->categories_table);
     }
 }
