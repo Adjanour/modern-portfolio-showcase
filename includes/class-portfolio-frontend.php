@@ -42,10 +42,30 @@ class Portfolio_Frontend {
      * Portfolio shortcode handler
      */
     public function portfolio_shortcode() {
+        global $wpdb;
+        
         ob_start();
         
-        // Make the injected database instance available to the template
+        // Prepare data for template
         $database = $this->database;
+        $frontend = $this;
+        
+        $items = $wpdb->get_results(
+            "SELECT p.*, c.name as category_name, c.slug as category_slug 
+             FROM {$database->get_table_name()} p 
+             LEFT JOIN {$database->get_categories_table()} c ON p.category_id = c.id 
+             ORDER BY p.created_at DESC"
+        );
+        
+        // Handle query errors
+        if ($items === null) {
+            $items = array();
+        }
+        
+        $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY name ASC");
+        if ($categories === null) {
+            $categories = array();
+        }
         
         include dirname(dirname(__FILE__)) . '/templates/frontend-portfolio.php';
         return ob_get_clean();

@@ -7,18 +7,8 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb;
-
-// Prefer categories provided by the calling code; fall back to querying here if not set.
-if (!isset($categories)) {
-    if (class_exists('Portfolio_Database')) {
-        $database   = new Portfolio_Database();
-        $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY created_at DESC");
-    } else {
-        // If Portfolio_Database is unavailable, use an empty list to avoid errors.
-        $categories = array();
-    }
-}
+// Data is passed from Portfolio_Admin::categories_page()
+// Available variables: $database, $categories
 ?>
 
 <div class="wrap portfolio-admin">
@@ -67,13 +57,13 @@ if (!isset($categories)) {
                         </thead>
                         <tbody id="categories-table-body">
                             <?php foreach ($categories as $cat): ?>
-                                <tr class="category-row" data-id="<?php echo $cat->id; ?>">
+                                <tr class="category-row" data-id="<?php echo esc_attr($cat->id); ?>">
                                     <td><?php echo esc_html($cat->name); ?></td>
                                     <td><code><?php echo esc_html($cat->slug); ?></code></td>
-                                    <td><?php echo date_i18n('M d, Y', strtotime($cat->created_at)); ?></td>
+                                    <td><?php echo esc_html(date_i18n('M d, Y', strtotime($cat->created_at))); ?></td>
                                     <td>
-                                        <button class="button button-small edit-category" data-id="<?php echo $cat->id; ?>">Edit</button>
-                                        <button class="button button-small button-link-delete delete-category" data-id="<?php echo $cat->id; ?>">Delete</button>
+                                        <button class="button button-small edit-category" data-id="<?php echo esc_attr($cat->id); ?>">Edit</button>
+                                        <button class="button button-small button-link-delete delete-category" data-id="<?php echo esc_attr($cat->id); ?>">Delete</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

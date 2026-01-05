@@ -7,35 +7,8 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb, $portfolio_database, $portfolio_frontend;
-
-// Use injected or global Portfolio_Database instance instead of creating a new one.
-if (isset($database) && $database instanceof Portfolio_Database) {
-    // $database was provided by the including context.
-} elseif (isset($portfolio_database) && $portfolio_database instanceof Portfolio_Database) {
-    $database = $portfolio_database;
-}
-
-// Use injected or global Portfolio_Frontend instance instead of creating a new one.
-if (isset($frontend) && $frontend instanceof Portfolio_Frontend) {
-    // $frontend was provided by the including context.
-} elseif (isset($portfolio_frontend) && $portfolio_frontend instanceof Portfolio_Frontend) {
-    $frontend = $portfolio_frontend;
-}
-$items = $wpdb->get_results(
-    "SELECT p.*, c.name as category_name, c.slug as category_slug 
-     FROM {$database->get_table_name()} p 
-     LEFT JOIN {$database->get_categories_table()} c ON p.category_id = c.id 
-     ORDER BY p.created_at DESC"
-);
-if (!is_array($items)) {
-    $items = array();
-}
-
-$categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY name ASC");
-if (!is_array($categories)) {
-    $categories = array();
-}
+// Data is passed from Portfolio_Frontend::portfolio_shortcode()
+// Available variables: $database, $frontend, $items, $categories
 ?>
 
 <div class="modern-portfolio-container">

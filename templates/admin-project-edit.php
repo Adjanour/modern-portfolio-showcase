@@ -7,26 +7,14 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb;
-$project = null;
+// Data is passed from Portfolio_Admin::projects_page()
+// Available variables: $database, $project, $categories, $images
 
-$edit_id = isset($_GET['edit']) ? sanitize_text_field($_GET['edit']) : 0;
-
-// Allow 'new' string or numeric ID
-if ($edit_id !== 'new' && intval($edit_id) > 0) {
-    $project = $wpdb->get_row($wpdb->prepare(
-        "SELECT * FROM {$database->get_table_name()} WHERE id = %d", 
-        intval($edit_id)
-    ));
-    
-    if (!$project) {
-        echo '<div class="wrap"><div class="error"><p>Project not found.</p></div></div>';
-        return;
-    }
+// Show error if project not found (for edit mode)
+if (isset($_GET['edit']) && $_GET['edit'] !== 'new' && !$project) {
+    echo '<div class="wrap"><div class="error"><p>Project not found.</p></div></div>';
+    return;
 }
-
-$categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table()} ORDER BY name ASC");
-$images = $project ? explode(',', $project->images) : array();
 ?>
 
 <div class="wrap portfolio-admin">

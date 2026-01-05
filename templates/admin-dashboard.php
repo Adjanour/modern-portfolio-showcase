@@ -7,16 +7,8 @@
 
 if (!defined('ABSPATH')) exit;
 
-global $wpdb, $portfolio_database;
-
-$total_projects   = 0;
-$total_categories = 0;
-
-if ( isset( $portfolio_database ) && $portfolio_database instanceof Portfolio_Database ) {
-    $database         = $portfolio_database;
-    $total_projects   = $wpdb->get_var( "SELECT COUNT(*) FROM {$database->get_table_name()}" );
-    $total_categories = $wpdb->get_var( "SELECT COUNT(*) FROM {$database->get_categories_table()}" );
-}
+// Data is passed from Portfolio_Admin::dashboard_page()
+// Available variables: $database, $total_projects, $total_categories
 ?>
 
 <div class="wrap portfolio-admin">
@@ -27,14 +19,14 @@ if ( isset( $portfolio_database ) && $portfolio_database instanceof Portfolio_Da
             <div class="stat-card">
                 <div class="stat-icon">📁</div>
                 <div class="stat-content">
-                    <h3><?php echo $total_projects; ?></h3>
+                    <h3><?php echo esc_html($total_projects); ?></h3>
                     <p>Total Projects</p>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">🏷️</div>
                 <div class="stat-content">
-                    <h3><?php echo $total_categories; ?></h3>
+                    <h3><?php echo esc_html($total_categories); ?></h3>
                     <p>Total Categories</p>
                 </div>
             </div>
