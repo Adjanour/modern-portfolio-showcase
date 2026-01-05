@@ -61,7 +61,7 @@ $categories = $wpdb->get_results("SELECT * FROM {$database->get_categories_table
                                 <tr class="category-row" data-id="<?php echo $cat->id; ?>">
                                     <td><?php echo esc_html($cat->name); ?></td>
                                     <td><code><?php echo esc_html($cat->slug); ?></code></td>
-                                    <td><?php echo date('M d, Y', strtotime($cat->created_at)); ?></td>
+                                    <td><?php echo date_i18n('M d, Y', strtotime($cat->created_at)); ?></td>
                                     <td>
                                         <button class="button button-small edit-category" data-id="<?php echo $cat->id; ?>">Edit</button>
                                         <button class="button button-small button-link-delete delete-category" data-id="<?php echo $cat->id; ?>">Delete</button>
