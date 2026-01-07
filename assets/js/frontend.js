@@ -1,20 +1,203 @@
 jQuery(document).ready(function($) {
-    let currentCardIndex = 0;
+    let currentSlideIndex = 0;
     let autoSlideInterval;
     let isAnimating = false;
     const SLIDE_DURATION = 6000; // 6 seconds per slide
-    const TRANSITION_DURATION = 800; // 0.8 seconds transition
+    const TRANSITION_DURATION = 500; // 0.5 seconds transition
     
-    const cards = $('.portfolio-card');
-    const indicators = $('.stack-indicator');
+    // Modern 3D Carousel
+    const slides = $('.carousel-slide');
+    const dots = $('.carousel-dot');
+    const captionEl = $('.carousel-caption h3');
     
-    // Initialize card stack
-    if (cards.length > 0) {
-        updateCardStack();
+    // Initialize carousel
+    if (slides.length > 0) {
+        updateCarousel();
         startAutoSlide();
     }
     
-    // Card stack navigation
+    // Stop all videos/iframes
+    function stopAllMedia() {
+        slides.each(function() {
+            const $slide = $(this);
+            $slide.removeClass('playing');
+            
+            // Stop iframe (YouTube/Vimeo)
+            const $iframe = $slide.find('.slide-iframe');
+            if ($iframe.length) {
+                $iframe.attr('src', '');
+            }
+            
+            // Stop HTML5 video
+            const $video = $slide.find('.slide-video');
+            if ($video.length) {
+                $video[0].pause();
+                $video[0].currentTime = 0;
+                $video.find('source').attr('src', '');
+            }
+        });
+    }
+    
+    // Update carousel positions and states
+    function updateCarousel() {
+        // Stop all media first
+        stopAllMedia();
+        
+        slides.each(function(index) {
+            const $slide = $(this);
+            const diff = index - currentSlideIndex;
+            
+            // Remove all position classes
+            $slide.removeClass('active prev-1 prev-2 next-1 next-2 hidden playing');
+            
+            // Assign position class based on relative position
+            if (diff === 0) {
+                $slide.addClass('active');
+            } else if (diff === -1 || (currentSlideIndex === 0 && index === slides.length - 1)) {
+                $slide.addClass('prev-1');
+            } else if (diff === -2 || (currentSlideIndex <= 1 && index >= slides.length - 2)) {
+                $slide.addClass('prev-2');
+            } else if (diff === 1 || (currentSlideIndex === slides.length - 1 && index === 0)) {
+                $slide.addClass('next-1');
+            } else if (diff === 2 || (currentSlideIndex >= slides.length - 2 && index <= 1)) {
+                $slide.addClass('next-2');
+            } else {
+                $slide.addClass('hidden');
+            }
+        });
+        
+        // Update caption
+        const activeSlide = slides.eq(currentSlideIndex);
+        const title = activeSlide.data('title') || '';
+        captionEl.text(title);
+        
+        // Update dots
+        dots.removeClass('active');
+        dots.eq(currentSlideIndex).addClass('active');
+    }
+    
+    // Play video on active slide
+    function playVideo($slide) {
+        const videoType = $slide.data('video-type');
+        const videoUrl = $slide.data('video');
+        
+        if (!videoUrl || videoType === 'none') return;
+        
+        $slide.addClass('playing');
+        stopAutoSlide();
+        
+        if (videoType === 'file') {
+            // WordPress uploaded video
+            const $video = $slide.find('.slide-video');
+            if ($video.length) {
+                $video.find('source').attr('src', videoUrl);
+                $video[0].load();
+                $video[0].play();
+            }
+        } else {
+            // YouTube/Vimeo iframe
+            const $iframe = $slide.find('.slide-iframe');
+            if ($iframe.length) {
+                // Add autoplay parameter
+                let embedUrl = videoUrl;
+                if (embedUrl.indexOf('?') === -1) {
+                    embedUrl += '?autoplay=1';
+                } else {
+                    embedUrl += '&autoplay=1';
+                }
+                $iframe.attr('src', embedUrl);
+            }
+        }
+    }
+    
+    // Click on play button or active slide to play video
+    $(document).on('click', '.carousel-slide.active .slide-play-btn', function(e) {
+        e.stopPropagation();
+        const $slide = $(this).closest('.carousel-slide');
+        playVideo($slide);
+    });
+    
+    function showSlide(index) {
+        if (isAnimating) return;
+        
+        // Handle wrap-around
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        isAnimating = true;
+        currentSlideIndex = index;
+        updateCarousel();
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, TRANSITION_DURATION);
+    }
+    
+    // Navigation buttons
+    $(document).on('click', '.carousel-nav-prev', function() {
+        stopAutoSlide();
+        showSlide(currentSlideIndex - 1);
+        startAutoSlide();
+    });
+    
+    $(document).on('click', '.carousel-nav-next', function() {
+        stopAutoSlide();
+        showSlide(currentSlideIndex + 1);
+        startAutoSlide();
+    });
+    
+    // Dot navigation
+    $(document).on('click', '.carousel-dot', function() {
+        stopAutoSlide();
+        const index = $(this).data('index');
+        showSlide(index);
+        startAutoSlide();
+    });
+    
+    // Slide click navigation (non-active slides)
+    $(document).on('click', '.carousel-slide:not(.active)', function() {
+        stopAutoSlide();
+        const index = $(this).data('index');
+        showSlide(index);
+        startAutoSlide();
+    });
+    
+    // Auto-advance slideshow
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideInterval = setInterval(function() {
+            showSlide(currentSlideIndex + 1);
+        }, SLIDE_DURATION);
+    }
+    
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
+    }
+    
+    // Pause on hover
+    $('.carousel-3d-container').hover(
+        function() {
+            stopAutoSlide();
+        },
+        function() {
+            startAutoSlide();
+        }
+    );
+    
+    // ==========================================
+    // Legacy support for old card stack (if exists)
+    // ==========================================
+    const cards = $('.portfolio-card');
+    const indicators = $('.stack-indicator');
+    let currentCardIndex = 0;
+    
+    if (cards.length > 0 && slides.length === 0) {
+        updateCardStack();
+    }
+    
     function updateCardStack() {
         cards.each(function(index) {
             const $card = $(this);
@@ -32,7 +215,6 @@ jQuery(document).ready(function($) {
             }
         });
         
-        // Update indicators
         indicators.removeClass('active');
         indicators.eq(currentCardIndex).addClass('active');
     }
@@ -49,7 +231,7 @@ jQuery(document).ready(function($) {
         }, TRANSITION_DURATION);
     }
     
-    // Navigation buttons
+    // Legacy navigation buttons
     $(document).on('click', '.stack-nav-prev', function() {
         stopAutoSlide();
         const newIndex = currentCardIndex > 0 ? currentCardIndex - 1 : cards.length - 1;
@@ -64,7 +246,6 @@ jQuery(document).ready(function($) {
         startAutoSlide();
     });
     
-    // Indicator navigation
     $(document).on('click', '.stack-indicator', function() {
         stopAutoSlide();
         const index = $(this).data('index');
@@ -72,7 +253,6 @@ jQuery(document).ready(function($) {
         startAutoSlide();
     });
     
-    // Card click navigation
     $(document).on('click', '.portfolio-card:not(.active)', function() {
         stopAutoSlide();
         const index = $(this).data('index');
@@ -282,9 +462,21 @@ jQuery(document).ready(function($) {
             }
         } else if ($('.carousel-view').hasClass('active')) {
             if (e.keyCode === 37) { // Left arrow
-                $('.stack-nav-prev').click();
+                stopAutoSlide();
+                if (slides.length > 0) {
+                    showSlide(currentSlideIndex - 1);
+                } else {
+                    $('.stack-nav-prev').click();
+                }
+                startAutoSlide();
             } else if (e.keyCode === 39) { // Right arrow
-                $('.stack-nav-next').click();
+                stopAutoSlide();
+                if (slides.length > 0) {
+                    showSlide(currentSlideIndex + 1);
+                } else {
+                    $('.stack-nav-next').click();
+                }
+                startAutoSlide();
             }
         }
     });
@@ -293,11 +485,12 @@ jQuery(document).ready(function($) {
     let touchStartX = 0;
     let touchEndX = 0;
     
-    $('.card-stack-wrapper').on('touchstart', function(e) {
+    // Support both new carousel and legacy card stack
+    $('.carousel-3d-wrapper, .card-stack-wrapper').on('touchstart', function(e) {
         touchStartX = e.changedTouches[0].screenX;
     });
     
-    $('.card-stack-wrapper').on('touchend', function(e) {
+    $('.carousel-3d-wrapper, .card-stack-wrapper').on('touchend', function(e) {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
     });
@@ -309,11 +502,19 @@ jQuery(document).ready(function($) {
         if (Math.abs(diff) > swipeThreshold) {
             stopAutoSlide();
             if (diff > 0) {
-                // Swipe left - next card
-                $('.stack-nav-next').click();
+                // Swipe left - next slide
+                if (slides.length > 0) {
+                    showSlide(currentSlideIndex + 1);
+                } else {
+                    $('.stack-nav-next').click();
+                }
             } else {
-                // Swipe right - previous card
-                $('.stack-nav-prev').click();
+                // Swipe right - previous slide
+                if (slides.length > 0) {
+                    showSlide(currentSlideIndex - 1);
+                } else {
+                    $('.stack-nav-prev').click();
+                }
             }
             startAutoSlide();
         }

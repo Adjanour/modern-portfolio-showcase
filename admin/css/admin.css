@@ -240,6 +240,26 @@
   font-family: monospace;
 }
 
+/* Video Upload */
+.video-upload-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.video-upload-wrapper input {
+  flex: 1;
+}
+
+.video-preview .video-selected {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
 #project-images-preview {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));

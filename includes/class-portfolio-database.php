@@ -30,6 +30,7 @@ class Portfolio_Database {
             title varchar(255) NOT NULL,
             description longtext NOT NULL,
             images text NOT NULL,
+            video_url varchar(500),
             project_link varchar(255) NOT NULL,
             category_id mediumint(9),
             created_at datetime DEFAULT CURRENT_TIMESTAMP,
@@ -61,6 +62,22 @@ class Portfolio_Database {
                     sprintf(
                         'Portfolio_Database: Failed to execute schema update "%s" on table "%s": %s',
                         $alter_sql,
+                        $this->table_name,
+                        $wpdb->last_error
+                    )
+                );
+            }
+        }
+        
+        // Add video_url column if it doesn't exist
+        if (!in_array('video_url', $column_names)) {
+            $alter_sql = "ALTER TABLE {$this->table_name} ADD COLUMN video_url varchar(500)";
+            $result    = $wpdb->query($alter_sql);
+
+            if ($result === false) {
+                error_log(
+                    sprintf(
+                        'Portfolio_Database: Failed to add video_url column to table "%s": %s',
                         $this->table_name,
                         $wpdb->last_error
                     )

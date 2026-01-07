@@ -74,6 +74,24 @@ if (isset($_GET['edit']) && $_GET['edit'] !== 'new' && !$project) {
             </tr>
             
             <tr>
+                <th><label for="project-video">Video (Optional)</label></th>
+                <td>
+                    <div class="video-upload-wrapper">
+                        <input type="url" id="project-video" name="video_url" class="regular-text" value="<?php echo $project && isset($project->video_url) ? esc_attr($project->video_url) : ''; ?>" placeholder="Enter URL or upload video">
+                        <button type="button" class="button upload-video-btn">Upload Video</button>
+                    </div>
+                    <div id="video-preview" class="video-preview" style="margin-top: 10px;">
+                        <?php if ($project && isset($project->video_url) && !empty($project->video_url)): ?>
+                            <span class="video-selected">✓ Video selected</span>
+                        <?php endif; ?>
+                    </div>
+                    <p class="description" style="margin-top: 8px;">
+                        <strong>Supports:</strong> YouTube URL, Vimeo URL, or upload a video file (MP4, WebM, MOV)
+                    </p>
+                </td>
+            </tr>
+            
+            <tr>
                 <th><label>Images (for carousel)</label></th>
                 <td>
                     <p class="description">Upload multiple images. The first image will be used as the cover image.</p>

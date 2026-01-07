@@ -125,8 +125,52 @@ jQuery(document).ready(function ($) {
         "#project-images-preview",
         "#project-images"
       );
+      setupVideoUpload();
       setupProjectForm();
     }
+  }
+
+  // Video upload handler
+  function setupVideoUpload() {
+    let videoUploader;
+
+    $(".upload-video-btn").on("click", function (e) {
+      e.preventDefault();
+
+      if (videoUploader) {
+        videoUploader.open();
+        return;
+      }
+
+      videoUploader = wp.media({
+        title: "Select or Upload Video",
+        button: {
+          text: "Use this video",
+        },
+        library: {
+          type: ["video"],
+        },
+        multiple: false,
+      });
+
+      videoUploader.on("select", function () {
+        const attachment = videoUploader.state().get("selection").first().toJSON();
+        $("#project-video").val(attachment.url);
+        $("#video-preview").html('<span class="video-selected">✓ ' + attachment.filename + '</span>');
+      });
+
+      videoUploader.open();
+    });
+
+    // Update preview when URL is manually entered
+    $("#project-video").on("input", function () {
+      const url = $(this).val().trim();
+      if (url) {
+        $("#video-preview").html('<span class="video-selected">✓ Video URL set</span>');
+      } else {
+        $("#video-preview").empty();
+      }
+    });
   }
 
   function setupProjectImageUpload(uploadBtn, previewId, imageInputId) {
@@ -237,6 +281,7 @@ jQuery(document).ready(function ($) {
 
       const categoryId = $("#project-category").val();
       const projectLink = $("#project-link").val().trim();
+      const videoUrl = $("#project-video").val().trim();
       const images = $("#project-images").val();
 
       // Debug output
@@ -277,6 +322,7 @@ jQuery(document).ready(function ($) {
         description: description,
         category_id: categoryId,
         project_link: projectLink,
+        video_url: videoUrl,
         images: images,
       };
 

@@ -9,20 +9,52 @@ if (!defined('ABSPATH')) exit;
 
 // Data is passed from Portfolio_Frontend::portfolio_shortcode()
 // Available variables: $database, $frontend, $items, $categories
+
+/**
+ * Helper function to detect video type and format URL
+ */
+function portfolio_get_video_data($video_url) {
+    if (empty($video_url)) {
+        return array('type' => 'none', 'url' => '');
+    }
+    
+    $video_url = trim($video_url);
+    
+    // Check for YouTube
+    if (strpos($video_url, 'youtube.com/watch') !== false) {
+        preg_match('/[?&]v=([^&]+)/', $video_url, $matches);
+        if (!empty($matches[1])) {
+            return array('type' => 'youtube', 'url' => 'https://www.youtube.com/embed/' . $matches[1]);
+        }
+    } elseif (strpos($video_url, 'youtu.be/') !== false) {
+        $video_id = substr(parse_url($video_url, PHP_URL_PATH), 1);
+        return array('type' => 'youtube', 'url' => 'https://www.youtube.com/embed/' . $video_id);
+    } elseif (strpos($video_url, 'youtube.com/embed') !== false) {
+        return array('type' => 'youtube', 'url' => $video_url);
+    }
+    
+    // Check for Vimeo
+    if (strpos($video_url, 'vimeo.com') !== false) {
+        preg_match('/vimeo\.com\/(\d+)/', $video_url, $matches);
+        if (!empty($matches[1])) {
+            return array('type' => 'vimeo', 'url' => 'https://player.vimeo.com/video/' . $matches[1]);
+        }
+    }
+    
+    // Check for direct video file (WordPress media upload)
+    $video_extensions = array('.mp4', '.webm', '.ogg', '.mov', '.m4v');
+    foreach ($video_extensions as $ext) {
+        if (stripos($video_url, $ext) !== false) {
+            return array('type' => 'file', 'url' => $video_url);
+        }
+    }
+    
+    // Default: treat as embeddable URL
+    return array('type' => 'embed', 'url' => $video_url);
+}
 ?>
 
 <div class="modern-portfolio-container">
-    <!-- <div class="portfolio-sidebar">
-        <div class="portfolio-filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <?php foreach ($categories as $cat): ?>
-                <button class="filter-btn" data-filter="<?php echo esc_attr($cat->slug); ?>">
-                    <?php echo esc_html($cat->name); ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
-    </div> -->
-    
     <div class="portfolio-main">
         <div class="brand-gallery-header">
             <h2>Brand Gallery</h2>
@@ -46,67 +78,67 @@ if (!defined('ABSPATH')) exit;
         </div>
         
         <div class="portfolio-content">
+            <!-- Clean Modern Carousel View -->
             <div class="carousel-view active">
-                <div class="card-stack-container">
-                    <button class="stack-nav-btn stack-nav-prev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <div class="carousel-3d-container">
+                    <button class="carousel-nav-btn carousel-nav-prev" aria-label="Previous Slide">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="15,18 9,12 15,6"></polyline>
                         </svg>
                     </button>
                     
-                    <div class="card-stack-wrapper">
-                        <div class="card-stack">
+                    <div class="carousel-3d-wrapper">
+                        <div class="carousel-3d-slides">
                             <?php foreach ($items as $index => $item): 
                                 $images = explode(',', $item->images);
-                                $filter_attr = $item->category_slug ? esc_attr($item->category_slug) : 'uncategorized';
-                                $short_description = $frontend->truncate_text($item->description, 100);
-                                $stack_position = $index;
+                                $first_image = trim($images[0]);
+                                $video_url = !empty($item->video_url) ? $item->video_url : '';
+                                $video_data = portfolio_get_video_data($video_url);
+                                $has_video = $video_data['type'] !== 'none';
                             ?>
-                                <div class="portfolio-card" 
-                                     data-index="<?php echo $index; ?>" 
-                                     data-tag="<?php echo $filter_attr; ?>" 
-                                     data-category="<?php echo $filter_attr; ?>" 
-                                     data-project-id="<?php echo $item->id; ?>"
-                                     style="--stack-index: <?php echo $stack_position; ?>;">
-                                    
-                                    <div class="card-media">
-                                        <?php if (count($images) > 1): ?>
-                                            <div class="card-image-carousel">
-                                                <?php foreach ($images as $img_index => $image): ?>
-                                                    <img src="<?php echo esc_url($image); ?>" 
-                                                         alt="<?php echo esc_attr($item->title); ?>" 
-                                                         class="card-image <?php echo $img_index === 0 ? 'active' : ''; ?>">
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php else: ?>
-                                            <img src="<?php echo esc_url($images[0]); ?>" 
+                                <div class="carousel-slide" 
+                                     data-index="<?php echo $index; ?>"
+                                     data-title="<?php echo esc_attr($item->title); ?>"
+                                     data-video-type="<?php echo esc_attr($video_data['type']); ?>"
+                                     data-video="<?php echo esc_attr($video_data['url']); ?>"
+                                     data-project-id="<?php echo $item->id; ?>">
+                                    <div class="slide-card">
+                                        <!-- Thumbnail / Cover Image -->
+                                        <div class="slide-media">
+                                            <img src="<?php echo esc_url($first_image); ?>" 
                                                  alt="<?php echo esc_attr($item->title); ?>" 
-                                                 class="card-image">
-                                        <?php endif; ?>
-                                        
-                                        <div class="card-play-overlay">
-                                            <div class="play-button">
-                                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                                    <polygon points="5,3 19,12 5,21"></polygon>
-                                                </svg>
+                                                 class="slide-thumbnail">
+                                            
+                                            <?php if ($has_video): ?>
+                                                <!-- Play button overlay for videos -->
+                                                <div class="slide-play-btn">
+                                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                                        <polygon points="5,3 19,12 5,21"></polygon>
+                                                    </svg>
+                                                </div>
+                                            <?php endif; ?>
+                                            
+                                            <!-- Video container (hidden until active) -->
+                                            <div class="slide-video-container">
+                                                <?php if ($video_data['type'] === 'file'): ?>
+                                                    <!-- WordPress uploaded video -->
+                                                    <video class="slide-video" controls playsinline>
+                                                        <source src="" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                <?php elseif ($has_video): ?>
+                                                    <!-- YouTube/Vimeo embed -->
+                                                    <iframe class="slide-iframe" 
+                                                            src="" 
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            allowfullscreen></iframe>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div class="card-content">
-                                        <h3 class="card-title"><?php echo esc_html($item->title); ?></h3>
-                                        <p class="card-description"><?php echo wp_kses_post($short_description); ?></p>
-                                        <div class="card-actions">
-                                            <button class="card-btn primary view-project-details" data-project-id="<?php echo $item->id; ?>">
-                                                View Details
-                                            </button>
-                                            <?php if ($item->project_link): ?>
-                                                <a href="<?php echo esc_url($item->project_link); ?>" 
-                                                   class="card-btn secondary" 
-                                                   target="_blank">
-                                                    Visit Project
-                                                </a>
-                                            <?php endif; ?>
+                                        
+                                        <!-- Title overlay -->
+                                        <div class="slide-overlay">
+                                            <h3><?php echo esc_html($item->title); ?></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -114,17 +146,24 @@ if (!defined('ABSPATH')) exit;
                         </div>
                     </div>
                     
-                    <button class="stack-nav-btn stack-nav-next">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <button class="carousel-nav-btn carousel-nav-next" aria-label="Next Slide">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="9,18 15,12 9,6"></polyline>
                         </svg>
                     </button>
                 </div>
                 
-                <div class="stack-indicators">
+                <!-- Caption -->
+                <div class="carousel-caption">
+                    <h3><?php echo !empty($items[0]) ? esc_html($items[0]->title) : ''; ?></h3>
+                </div>
+                
+                <!-- Dots Navigation -->
+                <div class="carousel-dots">
                     <?php foreach ($items as $index => $item): ?>
-                        <button class="stack-indicator <?php echo $index === 0 ? 'active' : ''; ?>" 
-                                data-index="<?php echo $index; ?>"></button>
+                        <button class="carousel-dot <?php echo $index === 0 ? 'active' : ''; ?>" 
+                                data-index="<?php echo $index; ?>"
+                                aria-label="Go to slide <?php echo $index + 1; ?>"></button>
                     <?php endforeach; ?>
                 </div>
             </div>

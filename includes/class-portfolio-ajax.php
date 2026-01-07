@@ -47,6 +47,7 @@ class Portfolio_Ajax {
         $title = isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '';
         $description = isset($_POST['description']) ? wp_kses_post($_POST['description']) : '';
         $images = isset($_POST['images']) ? sanitize_text_field($_POST['images']) : '';
+        $video_url = isset($_POST['video_url']) ? esc_url_raw($_POST['video_url']) : '';
         $project_link = isset($_POST['project_link']) ? esc_url_raw($_POST['project_link']) : '';
         $category_id = isset($_POST['category_id']) && !empty($_POST['category_id']) ? intval($_POST['category_id']) : null;
         
@@ -68,6 +69,7 @@ class Portfolio_Ajax {
             'title' => $title,
             'description' => $description,
             'images' => $images,
+            'video_url' => $video_url,
             'project_link' => $project_link,
             'category_id' => $category_id
         );
