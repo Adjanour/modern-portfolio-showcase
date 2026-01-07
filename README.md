@@ -135,7 +135,7 @@ GPL v2 or later
 
 ## Author
 
-Your Name
+Orcta Technologies
 
 ## Version
 

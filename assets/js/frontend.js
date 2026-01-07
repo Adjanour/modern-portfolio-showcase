@@ -1,32 +1,137 @@
 jQuery(document).ready(function($) {
-    let currentSlide = 0;
+    let currentCardIndex = 0;
     let autoSlideInterval;
     let isAnimating = false;
-    const SLIDE_DURATION = 5000; // 5 seconds per slide
+    const SLIDE_DURATION = 6000; // 6 seconds per slide
     const TRANSITION_DURATION = 800; // 0.8 seconds transition
     
-    const slides = $('.portfolio-slide');
-    const dots = $('.slideshow-dots .dot');
+    const cards = $('.portfolio-card');
+    const indicators = $('.stack-indicator');
     
-    // Initialize - show first slide
-    if (slides.length > 0) {
-        slides.first().addClass('active');
+    // Initialize card stack
+    if (cards.length > 0) {
+        updateCardStack();
         startAutoSlide();
     }
     
-    // View toggle
-    $(document).on('click', '.view-toggle-btn', function() {
+    // Card stack navigation
+    function updateCardStack() {
+        cards.each(function(index) {
+            const $card = $(this);
+            const position = index - currentCardIndex;
+            
+            $card.removeClass('active prev next');
+            $card.css('--stack-index', Math.abs(position));
+            
+            if (position === 0) {
+                $card.addClass('active');
+            } else if (position === -1) {
+                $card.addClass('prev');
+            } else if (position === 1) {
+                $card.addClass('next');
+            }
+        });
+        
+        // Update indicators
+        indicators.removeClass('active');
+        indicators.eq(currentCardIndex).addClass('active');
+    }
+    
+    function showCard(index) {
+        if (isAnimating || index < 0 || index >= cards.length) return;
+        
+        isAnimating = true;
+        currentCardIndex = index;
+        updateCardStack();
+        
+        setTimeout(() => {
+            isAnimating = false;
+        }, TRANSITION_DURATION);
+    }
+    
+    // Navigation buttons
+    $(document).on('click', '.stack-nav-prev', function() {
+        stopAutoSlide();
+        const newIndex = currentCardIndex > 0 ? currentCardIndex - 1 : cards.length - 1;
+        showCard(newIndex);
+        startAutoSlide();
+    });
+    
+    $(document).on('click', '.stack-nav-next', function() {
+        stopAutoSlide();
+        const newIndex = currentCardIndex < cards.length - 1 ? currentCardIndex + 1 : 0;
+        showCard(newIndex);
+        startAutoSlide();
+    });
+    
+    // Indicator navigation
+    $(document).on('click', '.stack-indicator', function() {
+        stopAutoSlide();
+        const index = $(this).data('index');
+        showCard(index);
+        startAutoSlide();
+    });
+    
+    // Card click navigation
+    $(document).on('click', '.portfolio-card:not(.active)', function() {
+        stopAutoSlide();
+        const index = $(this).data('index');
+        showCard(index);
+        startAutoSlide();
+    });
+    
+    // Auto-advance slideshow
+    function startAutoSlide() {
+        stopAutoSlide();
+        autoSlideInterval = setInterval(function() {
+            const nextIndex = currentCardIndex < cards.length - 1 ? currentCardIndex + 1 : 0;
+            showCard(nextIndex);
+        }, SLIDE_DURATION);
+    }
+    
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
+    }
+    
+    // Pause on hover
+    $('.card-stack-container').hover(
+        function() {
+            stopAutoSlide();
+        },
+        function() {
+            startAutoSlide();
+        }
+    );
+    
+    // Image carousel within cards
+    $(document).on('click', '.card-image-carousel', function(e) {
+        e.stopPropagation();
+        const $carousel = $(this);
+        const $images = $carousel.find('.card-image');
+        const $current = $images.filter('.active');
+        const currentIndex = $images.index($current);
+        const nextIndex = (currentIndex + 1) % $images.length;
+        
+        $images.removeClass('active');
+        $images.eq(nextIndex).addClass('active');
+    });
+    
+    // View toggle (simplified design)
+    $(document).on('click', '.simple-toggle-btn', function() {
         const view = $(this).data('view');
-        $('.view-toggle-btn').removeClass('active');
+        $('.simple-toggle-btn').removeClass('active');
         $(this).addClass('active');
         
-        if (view === 'slideshow') {
-            $('.slideshow-view').addClass('active');
+        if (view === 'carousel') {
+            $('.carousel-view').addClass('active');
             $('.grid-view').removeClass('active');
             startAutoSlide();
         } else {
             $('.grid-view').addClass('active');
-            $('.slideshow-view').removeClass('active');
+            $('.carousel-view').removeClass('active');
             stopAutoSlide();
         }
     });
@@ -37,29 +142,24 @@ jQuery(document).ready(function($) {
         $('.filter-btn').removeClass('active');
         $(this).addClass('active');
         
-        // Reset animation flag
+        // Reset animation flag and current index
         isAnimating = false;
-        currentSlide = 0;
+        currentCardIndex = 0;
         
-        // Filter slideshow
+        // Filter cards
         if (filter === 'all') {
-            slides.show();
+            cards.show();
         } else {
-            slides.hide().filter('[data-category="' + filter + '"]').show();
+            cards.hide().filter('[data-category="' + filter + '"]').show();
         }
         
-        // Show first visible slide with animation
-        const firstVisible = slides.filter(':visible').first();
-        if (firstVisible.length) {
-            slides.removeClass('active').css('opacity', '0');
-            firstVisible.addClass('active').css('opacity', '1');
-            currentSlide = slides.index(firstVisible);
+        // Update card references and restart
+        const visibleCards = cards.filter(':visible');
+        if (visibleCards.length > 0) {
+            updateCardStack();
         }
         
-        // Update dots
-        updateDotsVisibility();
-        
-        // Filter grid
+        // Filter grid items
         if (filter === 'all') {
             $('.portfolio-grid-item').fadeIn(300);
         } else {
@@ -72,158 +172,26 @@ jQuery(document).ready(function($) {
         startAutoSlide();
     });
     
-    // Slideshow navigation with smooth fade transitions
-    function showSlide(n) {
-        if (isAnimating) return;
-        
-        const visibleSlides = slides.filter(':visible');
-        
-        if (visibleSlides.length === 0) return;
-        
-        isAnimating = true;
-        
-        // Calculate new slide index
-        if (n >= visibleSlides.length) {
-            n = 0;
-        } else if (n < 0) {
-            n = visibleSlides.length - 1;
-        }
-        
-        currentSlide = n;
-        
-        // Fade out current slide
-        slides.filter('.active').animate({
-            opacity: 0
-        }, TRANSITION_DURATION, function() {
-            $(this).removeClass('active');
-        });
-        
-        // Fade in next slide
-        visibleSlides.eq(currentSlide).animate({
-            opacity: 1
-        }, TRANSITION_DURATION, function() {
-            $(this).addClass('active');
-            isAnimating = false;
-        }).css('display', 'block').css('opacity', '0');
-        
-        updateDots();
-    }
-    
-    function updateDots() {
-        const visibleSlides = slides.filter(':visible');
-        if (visibleSlides.length === 0) return;
-        
-        dots.removeClass('active');
-        
-        // Find which dot corresponds to the current visible slide
-        let dotIndex = 0;
-        visibleSlides.each(function(index) {
-            if ($(this).hasClass('active')) {
-                dotIndex = index;
-            }
-        });
-        
-        dots.each(function(index) {
-            if (index === dotIndex && $(this).is(':visible')) {
-                $(this).addClass('active');
-            }
-        });
-    }
-    
-    function updateDotsVisibility() {
-        const visibleSlides = slides.filter(':visible');
-        dots.each(function(index) {
-            if (visibleSlides.eq(index).length > 0) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-    
-    // Dot navigation
-    $(document).on('click', '.dot', function() {
-        stopAutoSlide();
-        const visibleSlides = slides.filter(':visible');
-        const visibleDots = dots.filter(':visible');
-        currentSlide = visibleDots.index($(this));
-        showSlide(currentSlide);
-        startAutoSlide();
-    });
-    
-    // Previous slide button
-    $(document).on('click', '.slideshow-container .carousel-prev', function() {
-        stopAutoSlide();
-        showSlide(currentSlide - 1);
-        startAutoSlide();
-    });
-    
-    // Next slide button
-    $(document).on('click', '.slideshow-container .carousel-next', function() {
-        stopAutoSlide();
-        showSlide(currentSlide + 1);
-        startAutoSlide();
-    });
-    
-    // Auto-advance slideshow
-    function startAutoSlide() {
-        stopAutoSlide();
-        autoSlideInterval = setInterval(function() {
-            showSlide(currentSlide + 1);
-        }, SLIDE_DURATION);
-    }
-    
-    function stopAutoSlide() {
-        if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
-            autoSlideInterval = null;
-        }
-    }
-    
-    // Pause on hover
-    $('.slideshow-container').hover(
-        function() {
-            stopAutoSlide();
-        },
-        function() {
-            startAutoSlide();
-        }
-    );
-    
-    // Pause on mouse enter, resume on mouse leave
-    $('.portfolio-slide').hover(
-        function() {
-            stopAutoSlide();
-        },
-        function() {
-            startAutoSlide();
-        }
-    );
-    
-    // View Details button click handler
+    // Project Details Modal
     $(document).on('click', '.view-project-details', function(e) {
-        e.preventDefault();
+        e.stopPropagation();
         const projectId = $(this).data('project-id');
         loadProjectModal(projectId);
     });
     
-    // Make grid cards clickable to open details
-    $(document).on('click', '.portfolio-grid-item', function(e) {
-        // Don't trigger if clicking on buttons
-        if (!$(e.target).closest('a, button').length) {
-            const projectId = $(this).data('project-id');
+    // Make cards clickable to open details
+    $(document).on('click', '.portfolio-card.active .card-media', function(e) {
+        if (!$(e.target).closest('.play-button').length) {
+            const projectId = $(this).closest('.portfolio-card').data('project-id');
             loadProjectModal(projectId);
         }
     });
     
-    // Make slideshow cards clickable to open details
-    $(document).on('click', '.portfolio-slide', function(e) {
-        // Don't trigger if clicking on buttons or carousel controls
-        if (!$(e.target).closest('button, a, .carousel-prev, .carousel-next, .slide-actions').length) {
+    // Grid view compatibility
+    $(document).on('click', '.portfolio-grid-item', function(e) {
+        if (!$(e.target).closest('a, button').length) {
             const projectId = $(this).data('project-id');
-            if (projectId) {
-                loadProjectModal(projectId);
-            }
+            loadProjectModal(projectId);
         }
     });
     
@@ -262,7 +230,7 @@ jQuery(document).ready(function($) {
                             ${project.description}
                         </div>
                         <div class="project-details-footer">
-                            <a href="${project.project_link}" target="_blank" class="portfolio-cta">Visit Live Project →</a>
+                            ${project.project_link ? `<a href="${project.project_link}" target="_blank" class="portfolio-cta">Visit Live Project →</a>` : ''}
                         </div>
                     </div>
                 `;
@@ -270,8 +238,9 @@ jQuery(document).ready(function($) {
                 $('#project-details-container').html(html);
                 $('#project-details-modal').fadeIn();
                 
-                // Handle carousel navigation
-                $('.carousel-control').on('click', function() {
+                // Handle carousel navigation in modal
+                $('.carousel-control').on('click', function(e) {
+                    e.stopPropagation();
                     const isNext = $(this).hasClass('next');
                     const currentImg = $('.carousel-image.active');
                     let nextImg;
@@ -284,25 +253,69 @@ jQuery(document).ready(function($) {
                         if (nextImg.length === 0) nextImg = $('.carousel-image').last();
                     }
                     
-                    currentImg.removeClass('active').fadeOut();
-                    nextImg.addClass('active').fadeIn();
+                    currentImg.removeClass('active').fadeOut(300);
+                    nextImg.addClass('active').fadeIn(300);
                 });
             }
+        }).fail(function() {
+            alert('Error loading project details. Please try again.');
         });
     }
     
-    // Hover effect for slideshow
-    $('.portfolio-slide').hover(
-        function() {
-            $(this).find('.slide-overlay').addClass('visible');
-        },
-        function() {
-            $(this).find('.slide-overlay').removeClass('visible');
+    // Close modal
+    $(document).on('click', '.modal-close, #project-details-modal', function(e) {
+        if (e.target === this) {
+            $('#project-details-modal').fadeOut();
         }
-    );
-    
-    // Stop auto-slide when user interacts
-    $(document).on('click', '.slideshow-dots, .filter-btn', function() {
-        stopAutoSlide();
-        setTimeout(startAutoSlide, 1000);
     });
+    
+    // Prevent modal from closing when clicking inside content
+    $(document).on('click', '.project-modal-content', function(e) {
+        e.stopPropagation();
+    });
+    
+    // Keyboard navigation
+    $(document).keydown(function(e) {
+        if ($('#project-details-modal').is(':visible')) {
+            if (e.keyCode === 27) { // ESC key
+                $('#project-details-modal').fadeOut();
+            }
+        } else if ($('.carousel-view').hasClass('active')) {
+            if (e.keyCode === 37) { // Left arrow
+                $('.stack-nav-prev').click();
+            } else if (e.keyCode === 39) { // Right arrow
+                $('.stack-nav-next').click();
+            }
+        }
+    });
+    
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    $('.card-stack-wrapper').on('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    $('.card-stack-wrapper').on('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+    
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = touchStartX - touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            stopAutoSlide();
+            if (diff > 0) {
+                // Swipe left - next card
+                $('.stack-nav-next').click();
+            } else {
+                // Swipe right - previous card
+                $('.stack-nav-prev').click();
+            }
+            startAutoSlide();
+        }
+    }
+});

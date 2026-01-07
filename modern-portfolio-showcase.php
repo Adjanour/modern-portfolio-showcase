@@ -4,7 +4,7 @@
  * Plugin URI: https://yoursite.com
  * Description: A clean and modern portfolio plugin with filtering, slideshow and grid views
  * Version: 1.0.0
- * Author: Your Name
+ * Author: Orcta Technologies 
  * License: GPL2
  * 
  * @package Modern_Portfolio_Showcase
