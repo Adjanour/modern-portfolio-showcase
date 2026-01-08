@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Plugin Preview</title>
+    <title>Modern Portfolio Showcase - 3D Carousel Preview</title>
     <style>
+        /**
+         * Modern Portfolio Showcase - Preview Styles
+         * Standalone version for testing without WordPress
+         */
+
         * {
             margin: 0;
             padding: 0;
@@ -13,265 +19,493 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
         }
+
+        /* ===========================================
+           BASE CONTAINER
+           =========================================== */
 
         .modern-portfolio-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .portfolio-sidebar {
-            width: 18%;
-            min-width: 150px;
-            background: #f8f9fa;
-            padding: 30px 20px;
-            border-right: 1px solid #e0e0e0;
-        }
-
-        .portfolio-filters {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: sticky;
-            top: 20px;
-        }
-
-        .filter-btn {
-            padding: 12px 20px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-align: left;
-            color: #333;
-        }
-
-        .filter-btn:hover {
-            border-color: #4f46e5;
-            color: #4f46e5;
-            transform: translateX(5px);
-        }
-
-        .filter-btn.active {
-            background: #4f46e5;
-            color: white;
-            border-color: #4f46e5;
-        }
-
-        /* Main Content */
-        .portfolio-main {
-            flex: 1;
-            padding: 30px;
-            background: #ffffff;
-        }
-
-        .portfolio-view-toggle {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .view-toggle-btn {
-            padding: 10px 20px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .view-toggle-btn:hover {
-            border-color: #4f46e5;
-        }
-
-        .view-toggle-btn.active {
-            background: #4f46e5;
-            color: white;
-            border-color: #4f46e5;
-        }
-
-        /* Slideshow View */
-        .slideshow-view {
-            display: none;
-        }
-
-        .slideshow-view.active {
             display: block;
-        }
-
-        .slideshow-container {
-            position: relative;
+            min-height: 600px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        .portfolio-slide {
-            display: none;
+        .portfolio-main {
+            width: 100%;
+            padding: 20px;
+        }
+
+        .portfolio-content {
             position: relative;
+        }
+
+        /* ===========================================
+           VIEW TOGGLE BUTTONS
+           =========================================== */
+
+        .view-toggle-simple {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: fit-content;
+            margin: 0 auto 30px;
+        }
+
+        .simple-toggle-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #666;
         }
 
-        .portfolio-slide.active {
+        .simple-toggle-btn:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            transform: scale(1.05);
+        }
+
+        .simple-toggle-btn.active {
+            background: #4f46e5;
+            color: white;
+            box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
+        }
+
+        .simple-toggle-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===========================================
+           3D CAROUSEL - CONTAINER
+           =========================================== */
+
+        .carousel-view {
+            display: none;
+        }
+
+        .carousel-view.active {
             display: block;
-            animation: fadeIn 0.5s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+        .carousel-3d-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 520px;
+            perspective: 1200px;
+            perspective-origin: 50% 50%;
+            padding: 20px 60px;
+            overflow: visible;
         }
 
-        .slide-images {
+        .carousel-3d-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 60%;
-            background: #f0f0f0;
+            max-width: 1400px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
         }
 
-        .slide-images img {
+        .carousel-3d-slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* ===========================================
+           3D CAROUSEL - SLIDE STYLES
+           =========================================== */
+
+        .carousel-slide {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 680px;
+            height: 400px;
+            transform: translate(-50%, -50%) scale(0.5);
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            border-radius: 16px;
+            overflow: visible;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .carousel-slide .slide-card {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: #fff;
+            transition: box-shadow 0.6s ease, filter 0.6s ease;
+        }
+
+        .carousel-slide .slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+            color: #fff;
+            transition: opacity 0.3s ease;
+            opacity: 1;
+            z-index: 4;
+        }
+
+        .carousel-slide .slide-overlay h3 {
+            font-size: 1em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Hover overlay */
+        .carousel-slide .slide-hover-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .carousel-slide:not(.active):hover .slide-hover-overlay {
+            opacity: 1;
+        }
+
+        .carousel-slide .slide-hover-overlay h3 {
+            color: #fff;
+            font-size: 1.3em;
+            margin: 0 0 10px 0;
+            font-weight: 600;
+        }
+
+        .carousel-slide .slide-hover-overlay p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.9em;
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+
+        .carousel-slide .slide-hover-overlay .slide-hover-btn {
+            padding: 10px 24px;
+            background: #4f46e5;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-slide .slide-hover-overlay .slide-hover-btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        /* ===========================================
+           POSITION CLASSES
+           =========================================== */
+
+        /* FAR LEFT - prev-2 */
+        .carousel-slide.prev-2 {
+            transform: translate(-50%, -50%) translateX(-400px) translateZ(-500px) rotateY(35deg);
+            z-index: 10;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel-slide.prev-2 .slide-card {
+            filter: blur(2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        /* LEFT - prev-1 */
+        .carousel-slide.prev-1 {
+            transform: translate(-50%, -50%) translateX(-200px) translateZ(-400px) rotateY(35deg);
+            z-index: 30;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel-slide.prev-1 .slide-card {
+            filter: blur(1px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        /* CENTER - Active */
+        .carousel-slide.active {
+            transform: translate(-50%, -50%) translateX(0) rotateY(0deg);
+            z-index: 100;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel-slide.active .slide-card {
+            filter: blur(0);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+        }
+
+        .carousel-slide.active .slide-overlay {
+            opacity: 0;
+        }
+
+        /* RIGHT - next-1 */
+        .carousel-slide.next-1 {
+            transform: translate(-50%, -50%) translateX(200px) translateZ(-400px) rotateY(-35deg);
+            z-index: 30;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel-slide.next-1 .slide-card {
+            filter: blur(1px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+        }
+
+        /* FAR RIGHT - next-2 */
+        .carousel-slide.next-2 {
+            transform: translate(-50%, -50%) translateX(400px) translateZ(-500px) rotateY(-35deg);
+            z-index: 10;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel-slide.next-2 .slide-card {
+            filter: blur(2px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Hidden slides */
+        .carousel-slide.hidden {
+            transform: translate(-50%, -50%) scale(0.3);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===========================================
+           MEDIA & VIDEO
+           =========================================== */
+
+        .slide-media {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .slide-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .slide-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            border: none;
+        }
+
+        .slide-play-btn svg {
+            width: 28px;
+            height: 28px;
+            margin-left: 4px;
+            color: #4f46e5;
+        }
+
+        .slide-play-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background: #fff;
+        }
+
+        .carousel-slide.active .slide-play-btn {
+            opacity: 1;
+        }
+
+        .slide-video-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .slide-video-container iframe,
+        .slide-video-container video {
+            width: 100%;
+            height: 100%;
+            border: none;
             object-fit: cover;
         }
 
-        /* Image Carousel */
-        .image-carousel {
-            position: relative;
-            width: 100%;
-            height: 100%;
+        .carousel-slide.active.playing .slide-thumbnail,
+        .carousel-slide.active.playing .slide-play-btn {
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .image-carousel img {
-            display: none;
+        .carousel-slide.active.playing .slide-video-container {
+            opacity: 1;
+            pointer-events: auto;
         }
 
-        .image-carousel img.active {
-            display: block;
-        }
+        /* ===========================================
+           NAVIGATION & CONTROLS
+           =========================================== */
 
-        .carousel-prev,
-        .carousel-next {
+        .carousel-nav-btn {
             position: absolute;
+            z-index: 200;
+            background: rgba(50, 50, 50, 0.75);
+            color: #fff;
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            cursor: pointer;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .carousel-prev:hover,
-        .carousel-next:hover {
-            background: white;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .carousel-prev {
-            left: 20px;
-        }
-
-        .carousel-next {
-            right: 20px;
-        }
-
-        /* Slide Overlay */
-        .slide-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7) 70%, transparent);
-            padding: 40px;
-            color: white;
-            transform: translateY(100%);
-            transition: transform 0.4s ease;
-        }
-
-        .portfolio-slide:hover .slide-overlay,
-        .slide-overlay.visible {
-            transform: translateY(0);
-        }
-
-        .slide-overlay h3 {
-            margin: 0 0 15px 0;
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .slide-overlay p {
-            margin: 0 0 20px 0;
-            font-size: 16px;
-            line-height: 1.6;
-            opacity: 0.95;
-        }
-
-        .portfolio-cta {
-            display: inline-block;
-            padding: 12px 30px;
-            background: #4f46e5;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
         }
 
-        .portfolio-cta:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        .carousel-nav-btn:hover {
+            background: rgba(70, 70, 70, 0.9);
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* Slideshow Dots */
-        .slideshow-dots {
+        .carousel-nav-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #fff;
+            stroke-width: 2.5;
+        }
+
+        .carousel-nav-prev {
+            left: calc(50% - 340px - 70px);
+        }
+
+        .carousel-nav-next {
+            right: calc(50% - 340px - 70px);
+        }
+
+        .carousel-caption {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin: 0 6px;
-            background: #ddd;
+        .carousel-caption h3 {
+            font-size: 1.2em;
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
             cursor: pointer;
             transition: all 0.3s ease;
+            padding: 0;
         }
 
-        .dot:hover {
-            background: #999;
+        .carousel-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .dot.active {
-            background: #4f46e5;
-            width: 30px;
-            border-radius: 6px;
+        .carousel-dot:hover {
+            background: rgba(255, 255, 255, 0.7);
         }
 
-        /* Grid View */
+        /* ===========================================
+           GRID VIEW
+           =========================================== */
+
         .grid-view {
             display: none;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -349,415 +583,633 @@
             opacity: 0.95;
         }
 
-        /* Responsive */
-        @media (max-width: 968px) {
-            .modern-portfolio-container {
-                flex-direction: column;
+        .grid-item-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-cta {
+            padding: 10px 16px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-cta:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        /* ===========================================
+           RESPONSIVE
+           =========================================== */
+
+        @media (max-width: 1400px) {
+            .carousel-slide {
+                width: 560px;
+                height: 340px;
             }
-            
-            .portfolio-sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
+
+            .carousel-nav-prev {
+                left: calc(50% - 280px - 70px);
             }
-            
-            .portfolio-filters {
-                flex-direction: row;
-                flex-wrap: wrap;
-                position: static;
-            }
-            
-            .filter-btn:hover {
-                transform: none;
-            }
-            
-            .grid-view {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 20px;
+
+            .carousel-nav-next {
+                right: calc(50% - 280px - 70px);
             }
         }
 
-        @media (max-width: 640px) {
-            .portfolio-main {
-                padding: 20px;
+        @media (max-width: 1200px) {
+            .carousel-slide {
+                width: 480px;
+                height: 300px;
             }
-            
-            .slide-overlay {
-                padding: 20px;
+
+            .carousel-slide.prev-2,
+            .carousel-slide.next-2 {
+                opacity: 0;
+                pointer-events: none;
             }
-            
-            .slide-overlay h3 {
-                font-size: 22px;
+
+            .carousel-nav-prev {
+                left: calc(50% - 240px - 60px);
             }
-            
-            .slide-overlay p {
-                font-size: 14px;
+
+            .carousel-nav-next {
+                right: calc(50% - 240px - 60px);
             }
-            
+        }
+
+        @media (max-width: 992px) {
+            .carousel-3d-container {
+                height: 450px;
+            }
+
+            .carousel-slide {
+                width: 420px;
+                height: 260px;
+            }
+
+            .carousel-nav-prev {
+                left: calc(50% - 210px - 55px);
+            }
+
+            .carousel-nav-next {
+                right: calc(50% - 210px - 55px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+
+            .carousel-3d-container {
+                height: 380px;
+                padding: 15px 10px;
+            }
+
+            .carousel-slide {
+                width: 300px;
+                height: 200px;
+            }
+
+            .carousel-nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .carousel-nav-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .carousel-nav-prev {
+                left: calc(50% - 150px - 50px);
+            }
+
+            .carousel-nav-next {
+                right: calc(50% - 150px - 50px);
+            }
+
             .grid-view {
                 grid-template-columns: 1fr;
-            }
-            
-            .carousel-prev,
-            .carousel-next {
-                width: 32px;
-                height: 32px;
-                font-size: 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="modern-portfolio-container">
-        <div class="portfolio-sidebar">
-            <div class="portfolio-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="web-apps">Web Apps</button>
-                <button class="filter-btn" data-filter="mobile-apps">Mobile Apps</button>
-                <button class="filter-btn" data-filter="robotics">Robotics</button>
-            </div>
-        </div>
-        
         <div class="portfolio-main">
-            <div class="portfolio-view-toggle">
-                <button class="view-toggle-btn active" data-view="slideshow">
-                    <span>Slideshow View</span>
+
+            <!-- View Toggle -->
+            <div class="view-toggle-simple">
+                <button id="carousel-view-btn" class="simple-toggle-btn active" title="Carousel View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
                 </button>
-                <button class="view-toggle-btn" data-view="grid">
-                    <span>Grid View</span>
+                <button id="grid-view-btn" class="simple-toggle-btn" title="Grid View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
                 </button>
             </div>
-            
+
             <div class="portfolio-content">
-                <div class="slideshow-view active">
-                    <div class="slideshow-container">
-                        <!-- Slide 1 -->
-                        <div class="portfolio-slide active" data-tag="web-apps">
-                            <div class="slide-images">
-                                <div class="image-carousel">
-                                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop" alt="E-commerce Platform" class="active">
-                                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop" alt="Dashboard">
-                                    <img src="https://images.unsplash.com/photo-1557821552-17105176677c?w=1200&h=800&fit=crop" alt="Analytics">
-                                    <button class="carousel-prev">‹</button>
-                                    <button class="carousel-next">›</button>
+
+                <!-- 3D Carousel View -->
+                <div id="carousel-view" class="carousel-view active">
+                    <div class="carousel-3d-container">
+
+                        <button class="carousel-nav-btn carousel-nav-prev" aria-label="Previous">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polyline points="15,18 9,12 15,6"></polyline>
+                            </svg>
+                        </button>
+
+                        <div class="carousel-3d-wrapper">
+                            <div class="carousel-3d-slides">
+
+                                <!-- Slide 1 -->
+                                <div class="carousel-slide" data-index="0" data-title="E-commerce Platform"
+                                    data-video-type="youtube"
+                                    data-video-url="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop"
+                                                alt="E-commerce Platform" class="slide-thumbnail">
+                                            <button class="slide-play-btn">
+                                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                                    <polygon points="5,3 19,12 5,21"></polygon>
+                                                </svg>
+                                            </button>
+                                            <div class="slide-video-container"></div>
+                                            <div class="slide-hover-overlay">
+                                                <h3>E-commerce Platform</h3>
+                                                <p>Modern scalable solution with real-time inventory and analytics
+                                                    dashboard.</p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>E-commerce Platform</h3>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>E-commerce Platform</h3>
-                                <p>A modern, scalable e-commerce solution with real-time inventory management, advanced analytics dashboard, and seamless payment integration. Built with React and Node.js.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
+
+                                <!-- Slide 2 -->
+                                <div class="carousel-slide" data-index="1" data-title="Fitness Tracker App">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=500&fit=crop"
+                                                alt="Fitness Tracker" class="slide-thumbnail">
+                                            <div class="slide-hover-overlay">
+                                                <h3>Fitness Tracker App</h3>
+                                                <p>Cross-platform app for tracking workouts, nutrition, and health
+                                                    metrics.</p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>Fitness Tracker App</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Slide 3 -->
+                                <div class="carousel-slide" data-index="2" data-title="Project Management Tool"
+                                    data-video-type="youtube"
+                                    data-video-url="https://www.youtube.com/embed/jNQXAC9IVRw">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=500&fit=crop"
+                                                alt="Project Management" class="slide-thumbnail">
+                                            <button class="slide-play-btn">
+                                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                                    <polygon points="5,3 19,12 5,21"></polygon>
+                                                </svg>
+                                            </button>
+                                            <div class="slide-video-container"></div>
+                                            <div class="slide-hover-overlay">
+                                                <h3>Project Management Tool</h3>
+                                                <p>Collaborative platform with Kanban boards and Gantt charts.</p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>Project Management Tool</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Slide 4 -->
+                                <div class="carousel-slide" data-index="3" data-title="Autonomous Delivery Robot">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&h=500&fit=crop"
+                                                alt="Delivery Robot" class="slide-thumbnail">
+                                            <div class="slide-hover-overlay">
+                                                <h3>Autonomous Delivery Robot</h3>
+                                                <p>AI-powered robot with advanced navigation and obstacle avoidance.</p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>Autonomous Delivery Robot</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Slide 5 -->
+                                <div class="carousel-slide" data-index="4" data-title="Food Delivery App">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=500&fit=crop"
+                                                alt="Food Delivery" class="slide-thumbnail">
+                                            <div class="slide-hover-overlay">
+                                                <h3>Food Delivery App</h3>
+                                                <p>Real-time ordering with GPS tracking and smart recommendations.</p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>Food Delivery App</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Slide 6 -->
+                                <div class="carousel-slide" data-index="5" data-title="Industrial Automation System">
+                                    <div class="slide-card">
+                                        <div class="slide-media">
+                                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=500&fit=crop"
+                                                alt="Industrial Automation" class="slide-thumbnail">
+                                            <div class="slide-hover-overlay">
+                                                <h3>Industrial Automation</h3>
+                                                <p>Smart factory solution with IoT sensors and predictive maintenance.
+                                                </p>
+                                                <button class="slide-hover-btn">View Details</button>
+                                            </div>
+                                        </div>
+                                        <div class="slide-overlay">
+                                            <h3>Industrial Automation System</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <!-- Slide 2 -->
-                        <div class="portfolio-slide" data-tag="mobile-apps">
-                            <div class="slide-images">
-                                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&h=800&fit=crop" alt="Fitness Tracker App">
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>Fitness Tracker App</h3>
-                                <p>Cross-platform mobile application for tracking workouts, nutrition, and health metrics. Features AI-powered workout recommendations and social challenges.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
-                            </div>
-                        </div>
+                        <button class="carousel-nav-btn carousel-nav-next" aria-label="Next">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polyline points="9,18 15,12 9,6"></polyline>
+                            </svg>
+                        </button>
 
-                        <!-- Slide 3 -->
-                        <div class="portfolio-slide" data-tag="web-apps">
-                            <div class="slide-images">
-                                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop" alt="Project Management Tool">
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>Project Management Tool</h3>
-                                <p>Collaborative project management platform with Kanban boards, Gantt charts, time tracking, and team communication features. Designed for agile teams.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
-                            </div>
-                        </div>
-
-                        <!-- Slide 4 -->
-                        <div class="portfolio-slide" data-tag="robotics">
-                            <div class="slide-images">
-                                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&h=800&fit=crop" alt="Autonomous Delivery Robot">
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>Autonomous Delivery Robot</h3>
-                                <p>AI-powered delivery robot with advanced navigation, obstacle avoidance, and package handling capabilities. Integrated with cloud-based fleet management.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
-                            </div>
-                        </div>
-
-                        <!-- Slide 5 -->
-                        <div class="portfolio-slide" data-tag="mobile-apps">
-                            <div class="slide-images">
-                                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&h=800&fit=crop" alt="Food Delivery App">
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>Food Delivery App</h3>
-                                <p>Real-time food ordering and delivery application with GPS tracking, restaurant management, and customer reviews. Features a smart recommendation engine.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
-                            </div>
-                        </div>
-
-                        <!-- Slide 6 -->
-                        <div class="portfolio-slide" data-tag="robotics">
-                            <div class="slide-images">
-                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&h=800&fit=crop" alt="Industrial Automation System">
-                            </div>
-                            <div class="slide-overlay">
-                                <h3>Industrial Automation System</h3>
-                                <p>Smart factory automation solution with IoT sensors, predictive maintenance, and real-time production monitoring. Reduces downtime by 40%.</p>
-                                <a href="#" class="portfolio-cta">View Project</a>
-                            </div>
-                        </div>
                     </div>
-                    <div class="slideshow-dots">
-                        <span class="dot active" data-slide="0"></span>
-                        <span class="dot" data-slide="1"></span>
-                        <span class="dot" data-slide="2"></span>
-                        <span class="dot" data-slide="3"></span>
-                        <span class="dot" data-slide="4"></span>
-                        <span class="dot" data-slide="5"></span>
+
+                    <div class="carousel-caption">
+                        <h3 id="active-project-title">E-commerce Platform</h3>
+                    </div>
+
+                    <div class="carousel-dots">
+                        <button class="carousel-dot active" data-index="0"></button>
+                        <button class="carousel-dot" data-index="1"></button>
+                        <button class="carousel-dot" data-index="2"></button>
+                        <button class="carousel-dot" data-index="3"></button>
+                        <button class="carousel-dot" data-index="4"></button>
+                        <button class="carousel-dot" data-index="5"></button>
                     </div>
                 </div>
-                
-                <div class="grid-view">
-                    <!-- Grid Item 1 -->
-                    <div class="portfolio-grid-item" data-tag="web-apps">
+
+                <!-- Grid View -->
+                <div id="grid-view" class="grid-view">
+
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=450&fit=crop" alt="E-commerce Platform">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=450&fit=crop"
+                                alt="E-commerce Platform">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>E-commerce Platform</h3>
                             <p>Modern scalable e-commerce solution with real-time inventory and analytics.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid Item 2 -->
-                    <div class="portfolio-grid-item" data-tag="mobile-apps">
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=450&fit=crop" alt="Fitness Tracker App">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=450&fit=crop"
+                                alt="Fitness Tracker">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>Fitness Tracker App</h3>
                             <p>Cross-platform app for tracking workouts, nutrition, and health metrics.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid Item 3 -->
-                    <div class="portfolio-grid-item" data-tag="web-apps">
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=450&fit=crop" alt="Project Management Tool">
+                            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=450&fit=crop"
+                                alt="Project Management">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>Project Management Tool</h3>
                             <p>Collaborative platform with Kanban boards, Gantt charts, and time tracking.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid Item 4 -->
-                    <div class="portfolio-grid-item" data-tag="robotics">
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=450&fit=crop" alt="Autonomous Delivery Robot">
+                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=450&fit=crop"
+                                alt="Delivery Robot">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>Autonomous Delivery Robot</h3>
                             <p>AI-powered robot with advanced navigation and obstacle avoidance.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid Item 5 -->
-                    <div class="portfolio-grid-item" data-tag="mobile-apps">
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=450&fit=crop" alt="Food Delivery App">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=450&fit=crop"
+                                alt="Food Delivery">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>Food Delivery App</h3>
                             <p>Real-time ordering with GPS tracking and smart recommendations.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid Item 6 -->
-                    <div class="portfolio-grid-item" data-tag="robotics">
+                    <div class="portfolio-grid-item">
                         <div class="grid-item-image">
-                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=450&fit=crop" alt="Industrial Automation">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=450&fit=crop"
+                                alt="Industrial Automation">
                         </div>
                         <div class="grid-item-overlay">
                             <h3>Industrial Automation System</h3>
                             <p>Smart factory solution with IoT sensors and predictive maintenance.</p>
-                            <a href="#" class="portfolio-cta">View Project</a>
+                            <div class="grid-item-actions">
+                                <button class="portfolio-cta">View Details</button>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.portfolio-slide');
-        const dots = document.querySelectorAll('.slideshow-dots .dot');
-        
-        // View toggle
-        document.querySelectorAll('.view-toggle-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const view = this.getAttribute('data-view');
-                document.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                if (view === 'slideshow') {
-                    document.querySelector('.slideshow-view').classList.add('active');
-                    document.querySelector('.grid-view').classList.remove('active');
-                } else {
-                    document.querySelector('.grid-view').classList.add('active');
-                    document.querySelector('.slideshow-view').classList.remove('active');
+        /**
+         * Modern Portfolio Showcase - Preview JavaScript
+         * Standalone version for testing without WordPress/jQuery
+         */
+
+        (function () {
+            'use strict';
+
+            // State
+            let currentSlide = 0;
+            let totalSlides = 0;
+            let autoSlideInterval = null;
+            const AUTO_SLIDE_DELAY = 5000;
+
+            // Elements
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const captionTitle = document.getElementById('active-project-title');
+
+            totalSlides = slides.length;
+
+            /**
+             * Update carousel positions
+             */
+            function updateCarousel() {
+                slides.forEach((slide, index) => {
+                    slide.classList.remove('active', 'prev-1', 'prev-2', 'next-1', 'next-2', 'hidden');
+
+                    let diff = index - currentSlide;
+
+                    // Wrap-around logic
+                    if (diff > totalSlides / 2) {
+                        diff -= totalSlides;
+                    } else if (diff < -totalSlides / 2) {
+                        diff += totalSlides;
+                    }
+
+                    switch (diff) {
+                        case 0:
+                            slide.classList.add('active');
+                            break;
+                        case -1:
+                            slide.classList.add('prev-1');
+                            break;
+                        case -2:
+                            slide.classList.add('prev-2');
+                            break;
+                        case 1:
+                            slide.classList.add('next-1');
+                            break;
+                        case 2:
+                            slide.classList.add('next-2');
+                            break;
+                        default:
+                            slide.classList.add('hidden');
+                    }
+                });
+
+                // Update caption
+                const activeSlide = document.querySelector('.carousel-slide.active');
+                if (activeSlide && captionTitle) {
+                    captionTitle.textContent = activeSlide.dataset.title || '';
                 }
-            });
-        });
-        
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Filter slideshow
-                if (filter === 'all') {
-                    slides.forEach(s => s.style.display = 'block');
-                    dots.forEach(d => d.style.display = 'inline-block');
-                } else {
-                    slides.forEach(s => {
-                        if (s.getAttribute('data-tag') === filter) {
-                            s.style.display = 'block';
-                        } else {
-                            s.style.display = 'none';
-                        }
-                    });
-                    
-                    dots.forEach((d, i) => {
-                        if (slides[i].style.display !== 'none') {
-                            d.style.display = 'inline-block';
-                        } else {
-                            d.style.display = 'none';
-                        }
-                    });
-                }
-                
-                // Show first visible slide
-                const visibleSlides = Array.from(slides).filter(s => s.style.display !== 'none');
-                slides.forEach(s => s.classList.remove('active'));
-                if (visibleSlides.length > 0) {
-                    visibleSlides[0].classList.add('active');
-                    currentSlide = Array.from(slides).indexOf(visibleSlides[0]);
-                }
-                updateDots();
-                
-                // Filter grid
-                const gridItems = document.querySelectorAll('.portfolio-grid-item');
-                if (filter === 'all') {
-                    gridItems.forEach(item => item.style.display = 'block');
-                } else {
-                    gridItems.forEach(item => {
-                        if (item.getAttribute('data-tag') === filter) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                }
-            });
-        });
-        
-        // Slideshow navigation
-        function showSlide(n) {
-            const visibleSlides = Array.from(slides).filter(s => s.style.display !== 'none');
-            
-            if (visibleSlides.length === 0) return;
-            
-            if (n >= visibleSlides.length) {
-                currentSlide = 0;
-            } else if (n < 0) {
-                currentSlide = visibleSlides.length - 1;
-            } else {
-                currentSlide = n;
+
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+
+                // Stop any playing videos
+                stopAllMedia();
             }
-            
-            slides.forEach(s => s.classList.remove('active'));
-            visibleSlides[currentSlide].classList.add('active');
-            updateDots();
-        }
-        
-        function updateDots() {
-            const visibleDots = Array.from(dots).filter(d => d.style.display !== 'none');
-            visibleDots.forEach(d => d.classList.remove('active'));
-            if (visibleDots[currentSlide]) {
-                visibleDots[currentSlide].classList.add('active');
+
+            /**
+             * Navigate to slide
+             */
+            function showSlide(index) {
+                if (index >= totalSlides) index = 0;
+                if (index < 0) index = totalSlides - 1;
+                currentSlide = index;
+                updateCarousel();
             }
-        }
-        
-        // Dot navigation
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', function() {
-                const visibleDots = Array.from(dots).filter(d => d.style.display !== 'none');
-                currentSlide = visibleDots.indexOf(this);
-                showSlide(currentSlide);
+
+            /**
+             * Play video
+             */
+            function playVideo(slide) {
+                const videoContainer = slide.querySelector('.slide-video-container');
+                const videoUrl = slide.dataset.videoUrl;
+                const videoType = slide.dataset.videoType;
+
+                if (!videoUrl || !videoContainer) return;
+
+                videoContainer.innerHTML = '';
+
+                if (videoType === 'youtube') {
+                    videoContainer.innerHTML = `<iframe src="${videoUrl}?autoplay=1&rel=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+                }
+
+                slide.classList.add('playing');
+                stopAutoSlide();
+            }
+
+            /**
+             * Stop all media
+             */
+            function stopAllMedia() {
+                document.querySelectorAll('.carousel-slide.playing').forEach(slide => {
+                    slide.classList.remove('playing');
+                    const container = slide.querySelector('.slide-video-container');
+                    if (container) container.innerHTML = '';
+                });
+            }
+
+            /**
+             * Auto-slide
+             */
+            function startAutoSlide() {
+                stopAutoSlide();
+                autoSlideInterval = setInterval(() => showSlide(currentSlide + 1), AUTO_SLIDE_DELAY);
+            }
+
+            function stopAutoSlide() {
+                if (autoSlideInterval) {
+                    clearInterval(autoSlideInterval);
+                    autoSlideInterval = null;
+                }
+            }
+
+            // Event Listeners
+
+            // Navigation buttons
+            document.querySelector('.carousel-nav-prev').addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(currentSlide - 1);
+                startAutoSlide();
             });
-        });
-        
-        // Auto-advance slideshow
-        let autoSlide = setInterval(function() {
-            showSlide(currentSlide + 1);
-        }, 5000);
-        
-        // Pause on hover
-        document.querySelector('.slideshow-container').addEventListener('mouseenter', function() {
-            clearInterval(autoSlide);
-        });
-        
-        document.querySelector('.slideshow-container').addEventListener('mouseleave', function() {
-            autoSlide = setInterval(function() {
+
+            document.querySelector('.carousel-nav-next').addEventListener('click', (e) => {
+                e.stopPropagation();
                 showSlide(currentSlide + 1);
-            }, 5000);
-        });
-        
-        // Image carousel within slides
-        document.querySelectorAll('.carousel-prev').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const carousel = this.closest('.image-carousel');
-                const images = carousel.querySelectorAll('img');
-                const activeImg = carousel.querySelector('img.active');
-                const activeIndex = Array.from(images).indexOf(activeImg);
-                
-                images.forEach(img => img.classList.remove('active'));
-                if (activeIndex > 0) {
-                    images[activeIndex - 1].classList.add('active');
-                } else {
-                    images[images.length - 1].classList.add('active');
+                startAutoSlide();
+            });
+
+            // Dot navigation
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    showSlide(parseInt(dot.dataset.index));
+                    startAutoSlide();
+                });
+            });
+
+            // Click on slides
+            slides.forEach(slide => {
+                slide.addEventListener('click', () => {
+                    if (!slide.classList.contains('active')) {
+                        showSlide(parseInt(slide.dataset.index));
+                        startAutoSlide();
+                    }
+                });
+            });
+
+            // Play buttons
+            document.querySelectorAll('.slide-play-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const slide = btn.closest('.carousel-slide');
+                    if (slide.classList.contains('active')) {
+                        playVideo(slide);
+                    }
+                });
+            });
+
+            // Pause on hover
+            const carouselContainer = document.querySelector('.carousel-3d-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            carouselContainer.addEventListener('mouseleave', () => {
+                if (!document.querySelector('.carousel-slide.playing')) {
+                    startAutoSlide();
                 }
             });
-        });
-        
-        document.querySelectorAll('.carousel-next').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const carousel = this.closest('.image-carousel');
-                const images = carousel.querySelectorAll('img');
-                const activeImg = carousel.querySelector('img.active');
-                const activeIndex = Array.from(images).indexOf(activeImg);
-                
-                images.forEach(img => img.classList.remove('active'));
-                if (activeIndex < images.length - 1) {
-                    images[activeIndex + 1].classList.add('active');
-                } else {
-                    images[0].classList.add('active');
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!document.getElementById('carousel-view').classList.contains('active')) return;
+                if (e.key === 'ArrowLeft') {
+                    showSlide(currentSlide - 1);
+                    startAutoSlide();
+                } else if (e.key === 'ArrowRight') {
+                    showSlide(currentSlide + 1);
+                    startAutoSlide();
                 }
             });
-        });
+
+            // View toggle
+            document.getElementById('carousel-view-btn').addEventListener('click', () => {
+                document.getElementById('carousel-view-btn').classList.add('active');
+                document.getElementById('grid-view-btn').classList.remove('active');
+                document.getElementById('carousel-view').classList.add('active');
+                document.getElementById('grid-view').classList.remove('active');
+                startAutoSlide();
+            });
+
+            document.getElementById('grid-view-btn').addEventListener('click', () => {
+                document.getElementById('grid-view-btn').classList.add('active');
+                document.getElementById('carousel-view-btn').classList.remove('active');
+                document.getElementById('grid-view').classList.add('active');
+                document.getElementById('carousel-view').classList.remove('active');
+                stopAutoSlide();
+                stopAllMedia();
+            });
+
+            // Initialize
+            updateCarousel();
+            startAutoSlide();
+
+        })();
     </script>
 </body>
+
 </html>

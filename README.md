@@ -1,133 +1,181 @@
 # Modern Portfolio Showcase
 
-A clean and modern WordPress portfolio plugin with filtering, slideshow and grid views.
+A WordPress portfolio plugin featuring a 3D coverflow carousel, grid view, and video support.
 
 ## Features
 
-- **Beautiful Portfolio Display**: Showcase your projects with slideshow and grid views
-- **Category Filtering**: Organize projects by categories with smooth filtering
-- **Image Carousels**: Support for multiple images per project with carousel functionality
-- **Rich Text Editor**: Full WYSIWYG editor for project descriptions
-- **Responsive Design**: Mobile-friendly and adaptable to all screen sizes
-- **Easy Management**: Intuitive admin interface for managing projects and categories
+- **3D Coverflow Carousel**: Stunning perspective-based carousel with smooth animations
+- **Grid View**: Alternative layout with hover overlays
+- **Video Support**: YouTube, Vimeo, and direct file uploads
+- **Category Filtering**: Organize projects by categories
+- **Responsive Design**: Mobile-friendly layouts
+- **Easy Management**: Intuitive admin interface
 
-## Directory Structure
+---
 
-```
-modern-portfolio-showcase/
-├── admin/                      # Admin-specific assets
-│   ├── css/                   # Admin styles
-│   └── js/                    # Admin scripts
-├── assets/                    # Frontend assets
-│   ├── css/                   # Frontend styles
-│   └── js/                    # Frontend scripts
-├── includes/                  # PHP classes and core logic
-│   ├── class-portfolio-database.php
-│   ├── class-portfolio-admin.php
-│   ├── class-portfolio-ajax.php
-│   └── class-portfolio-frontend.php
-├── templates/                 # Template files
-│   ├── admin-dashboard.php
-│   ├── admin-categories.php
-│   ├── admin-projects-list.php
-│   ├── admin-project-edit.php
-│   └── frontend-portfolio.php
-├── examples/                  # Example files and previews
-│   └── preview.html
-├── modern-portfolio-showcase.php  # Main plugin file
-├── .gitignore
-└── README.md
-```
+## Quick Start
 
-## Installation
+### Installation
+1. Upload `modern-portfolio-showcase` to `/wp-content/plugins/`
+2. Activate the plugin in WordPress admin
+3. Navigate to **Portfolio** in admin menu
 
-1. Download or clone this repository
-2. Upload the `modern-portfolio-showcase` folder to your WordPress `wp-content/plugins/` directory
-3. Activate the plugin through the WordPress admin panel
-4. Navigate to **Portfolio** in the admin menu to start managing your projects
+### Add Content
+1. **Categories**: Portfolio → Categories → Add category name → Save
+2. **Projects**: Portfolio → Projects → Add New → Fill details → Create
 
-## Usage
-
-### Managing Categories
-
-1. Go to **Portfolio > Categories** in the admin menu
-2. Enter a category name (slug will be auto-generated)
-3. Click "Save Category"
-
-### Adding Projects
-
-1. Go to **Portfolio > Projects** in the admin menu
-2. Click "Add New"
-3. Fill in the project details:
-   - **Title**: Your project name
-   - **Category**: Select a category
-   - **Description**: Use the rich text editor for detailed descriptions
-   - **Project Link**: URL to the live project
-   - **Images**: Upload one or more images (first image becomes the cover)
-4. Click "Create Project"
-
-### Displaying the Portfolio
-
-Add the shortcode to any page or post:
-
+### Display Portfolio
+Add this shortcode to any page:
 ```
 [modern_portfolio]
 ```
 
-## Development
+---
 
-### Working on UI (HTML/CSS/JS)
+## File Structure
 
-All frontend UI files are organized separately:
+```
+modern-portfolio-showcase/
+├── assets/
+│   ├── css/
+│   │   └── frontend-clean.css    # Frontend styles (production)
+│   └── js/
+│       └── frontend-clean.js     # Frontend scripts (production)
+├── admin/
+│   ├── css/admin.css             # Admin styles
+│   └── js/admin.js               # Admin scripts
+├── includes/
+│   ├── class-portfolio-database.php
+│   ├── class-portfolio-admin.php
+│   ├── class-portfolio-ajax.php
+│   └── class-portfolio-frontend.php
+├── templates/
+│   ├── frontend-portfolio.php    # Portfolio display template
+│   └── admin-*.php               # Admin templates
+├── docs/
+│   └── 3d-carousel-tutorial.md   # Carousel customization guide
+└── modern-portfolio-showcase.php # Main plugin file
+```
 
-- **HTML Templates**: `templates/frontend-portfolio.php`
-- **CSS**: `assets/css/frontend.css`
-- **JavaScript**: `assets/js/frontend.js`
-
-### Working on Admin Interface
-
-Admin interface files are in dedicated directories:
-
-- **HTML Templates**: `templates/admin-*.php`
-- **CSS**: `admin/css/admin.css`
-- **JavaScript**: `admin/js/admin.js`
-
-### Working on PHP Logic
-
-PHP classes are modular and organized in the `includes/` directory:
-
-- **Database Operations**: `includes/class-portfolio-database.php`
-- **Admin Functions**: `includes/class-portfolio-admin.php`
-- **AJAX Handlers**: `includes/class-portfolio-ajax.php`
-- **Frontend Functions**: `includes/class-portfolio-frontend.php`
-
-### File References
-
-All file paths are now properly structured:
-- CSS/JS files are loaded via plugin directory URL
-- Templates are included via absolute paths
-- No hardcoded paths in the codebase
+---
 
 ## Customization
 
-### Styling
+### Carousel Card Sizes
 
-- Frontend styles: Edit `assets/css/frontend.css`
-- Admin styles: Edit `admin/css/admin.css`
+Edit `assets/css/frontend-clean.css`:
 
-### Functionality
+```css
+/* Base card dimensions (Section 4) */
+.carousel-slide {
+    width: 680px;     /* Card width */
+    height: 400px;    /* Card height */
+}
 
-- Modify shortcode output: Edit `templates/frontend-portfolio.php`
-- Customize admin pages: Edit templates in `templates/admin-*.php`
-- Add new features: Extend classes in `includes/`
+/* Side card scaling (Section 5) */
+.carousel-slide.prev-1 {
+    transform: translate(-50%, -50%) translateX(-400px) scale(0.7) rotateY(35deg);
+    /*                                                   ↑ Scale: 0.7 = 70% size */
+}
+```
+
+### 3D Effect Depth
+
+```css
+/* Container perspective (Section 3) */
+.carousel-3d-container {
+    perspective: 1200px;  /* Lower = more dramatic 3D */
+}
+
+/* Card rotation angle */
+.carousel-slide.prev-1 {
+    transform: ... rotateY(35deg);  /* Higher = more angled */
+}
+```
+
+### Auto-Slide Timing
+
+Edit `assets/js/frontend-clean.js`:
+
+```javascript
+// Configuration section
+const CONFIG = {
+    autoSlideDelay: 5000,  // 5 seconds between slides
+};
+```
+
+### Colors
+
+```css
+/* Primary accent color */
+.simple-toggle-btn.active,
+.portfolio-cta,
+.carousel-dot.active {
+    background: #4f46e5;  /* Indigo */
+}
+```
+
+---
+
+## Development
+
+### Frontend Files
+| Purpose | File |
+|---------|------|
+| Styles | `assets/css/frontend-clean.css` |
+| Scripts | `assets/js/frontend-clean.js` |
+| Template | `templates/frontend-portfolio.php` |
+
+### Admin Files
+| Purpose | File |
+|---------|------|
+| Styles | `admin/css/admin.css` |
+| Scripts | `admin/js/admin.js` |
+| Templates | `templates/admin-*.php` |
+
+### PHP Classes
+| Class | Purpose |
+|-------|---------|
+| `Portfolio_Database` | Table creation, queries |
+| `Portfolio_Admin` | Admin menus, pages |
+| `Portfolio_Ajax` | AJAX handlers |
+| `Portfolio_Frontend` | Shortcode, asset loading |
+
+### Adding Custom Fields
+
+1. **Database**: Add column in `class-portfolio-database.php`
+2. **Admin Form**: Add input in `templates/admin-project-edit.php`
+3. **Save Handler**: Update `class-portfolio-ajax.php`
+4. **Display**: Use in `templates/frontend-portfolio.php`
+
+---
+
+## Carousel Deep Dive
+
+See [docs/3d-carousel-tutorial.md](docs/3d-carousel-tutorial.md) for:
+- CSS 3D transform concepts
+- Position class system (active, prev-1, next-1, etc.)
+- Video integration details
+- Advanced customization examples
+
+### Position Classes
+
+| Class | Position | Transform |
+|-------|----------|-----------|
+| `.active` | Center | `scale(1) rotateY(0)` |
+| `.prev-1` | Left | `translateX(-400px) scale(0.7) rotateY(35deg)` |
+| `.prev-2` | Far Left | `translateX(-520px) scale(0.55) rotateY(45deg)` |
+| `.next-1` | Right | `translateX(400px) scale(0.7) rotateY(-35deg)` |
+| `.next-2` | Far Right | `translateX(520px) scale(0.55) rotateY(-45deg)` |
+
+---
 
 ## Browser Support
 
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers
+- Chrome, Firefox, Safari, Edge (latest versions)
+- iOS Safari, Android Chrome
+
+---
 
 ## License
 
@@ -139,4 +187,4 @@ Orcta Technologies
 
 ## Version
 
-1.0.0
+2.0.0

@@ -5,6 +5,34 @@ All notable changes to the Modern Portfolio Showcase plugin will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-01-08
+
+### Added
+- 3D coverflow carousel with perspective transforms
+- Video support (YouTube, Vimeo, direct uploads)
+- Hover overlay on carousel cards
+- Auto-slide with pause on hover
+- Keyboard navigation (arrow keys)
+- Comprehensive code comments throughout
+
+### Changed
+- Complete CSS refactor: 2008 lines → ~680 lines (66% reduction)
+- Complete JS refactor: 543 lines → ~350 lines (35% reduction)
+- New files: `frontend-clean.css`, `frontend-clean.js`
+- Improved template structure with HTML comments
+- Better responsive breakpoints
+
+### Removed
+- Legacy card stack code
+- Duplicate auto-slide functions
+- Unused `.portfolio-card` and `.card-stack-*` styles
+- Redundant documentation files (consolidated into README.md)
+
+### Documentation
+- Consolidated docs into single README.md
+- Kept detailed carousel tutorial in `docs/3d-carousel-tutorial.md`
+- Removed: INDEX.md, QUICKSTART.md, DEVELOPMENT.md, ARCHITECTURE.md, CAROUSEL-CUSTOMIZATION.md
+
 ## [1.0.0] - 2026-01-05
 
 ### Added

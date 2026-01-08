@@ -21,14 +21,16 @@ class Portfolio_Frontend {
     public function enqueue_frontend_scripts() {
         wp_enqueue_style(
             'portfolio-frontend-css', 
-            plugin_dir_url(dirname(__FILE__)) . 'assets/css/frontend.css'
+            plugin_dir_url(dirname(__FILE__)) . 'assets/css/frontend-clean.css',
+            array(),
+            '2.0'
         );
         
         wp_enqueue_script(
             'portfolio-frontend-js', 
-            plugin_dir_url(dirname(__FILE__)) . 'assets/js/frontend.js', 
+            plugin_dir_url(dirname(__FILE__)) . 'assets/js/frontend-clean.js', 
             array('jquery'), 
-            '1.0', 
+            '2.0', 
             true
         );
         
