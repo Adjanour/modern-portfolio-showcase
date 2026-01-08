@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Portfolio Showcase - 3D Carousel Plugin for WordPress</title>
+    <meta name="description"
+        content="A stunning 3D coverflow carousel plugin for WordPress. Showcase your portfolio with beautiful animations, video support, and full customization.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎠</text></svg>">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <span class="logo-icon">◈</span>
+                Modern Portfolio
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#demo">Demo</a>
+                <a href="#customize">Customize</a>
+                <a href="#docs">Docs</a>
+                <a href="https://github.com/your-repo" class="btn btn-outline" target="_blank">GitHub</a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">WordPress Plugin v2.1.0</div>
+                <h1>Showcase Your Work in <span class="gradient-text">Stunning 3D</span></h1>
+                <p class="hero-subtitle">
+                    A beautiful 3D coverflow carousel for WordPress. Display your portfolio
+                    with smooth animations, video support, and complete customization.
+                </p>
+                <div class="hero-cta">
+                    <a href="#demo" class="btn btn-primary btn-lg">
+                        See Demo
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </a>
+                    <a href="#docs" class="btn btn-ghost btn-lg">Documentation</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">3D</span>
+                        <span class="stat-label">Coverflow Effect</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">Customizable</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">Zero</span>
+                        <span class="stat-label">Dependencies</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Demo Section -->
+    <section id="demo" class="section demo-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Experience the 3D Effect</h2>
+                <p>Click the arrows or use keyboard navigation to explore</p>
+            </div>
+
+            <!-- Interactive Demo Carousel -->
+            <div class="demo-carousel">
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-slide" data-index="0">
+                            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=500&fit=crop"
+                                alt="Web Development">
+                            <div class="slide-overlay">
+                                <span class="slide-category">Development</span>
+                                <h3>Modern Web Apps</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" data-index="1">
+                            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=500&fit=crop"
+                                alt="UI Design">
+                            <div class="slide-overlay">
+                                <span class="slide-category">Design</span>
+                                <h3>Beautiful Interfaces</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" data-index="2">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop"
+                                alt="Analytics">
+                            <div class="slide-overlay">
+                                <span class="slide-category">Analytics</span>
+                                <h3>Data Dashboards</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" data-index="3">
+                            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=500&fit=crop"
+                                alt="Mobile App">
+                            <div class="slide-overlay">
+                                <span class="slide-category">Mobile</span>
+                                <h3>iOS & Android</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-slide" data-index="4">
+                            <img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?w=800&h=500&fit=crop"
+                                alt="Branding">
+                            <div class="slide-overlay">
+                                <span class="slide-category">Branding</span>
+                                <h3>Visual Identity</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="carousel-btn carousel-prev" aria-label="Previous">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
+                        </svg>
+                    </button>
+                    <button class="carousel-btn carousel-next" aria-label="Next">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 18l6-6-6-6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="carousel-dots"></div>
+            </div>
+
+            <p class="demo-hint">
+                <kbd>←</kbd> <kbd>→</kbd> Use arrow keys to navigate
+            </p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need</h2>
+                <p>Powerful features for stunning portfolio presentations</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13" />
+                        </svg>
+                    </div>
+                    <h3>True 3D Transforms</h3>
+                    <p>Real CSS 3D perspective with translateZ and rotateY. Not fake scaling — genuine depth.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M9 9l6 6M9 15l6-6" />
+                        </svg>
+                    </div>
+                    <h3>Video Support</h3>
+                    <p>Embed YouTube, Vimeo, or self-hosted videos. Play inline with smooth transitions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                        </svg>
+                    </div>
+                    <h3>Full Customization</h3>
+                    <p>Admin settings panel with 20+ options. Colors, dimensions, effects, animations — all adjustable.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="2" y="3" width="20" height="14" rx="2" />
+                            <path d="M8 21h8M12 17v4" />
+                        </svg>
+                    </div>
+                    <h3>Responsive Design</h3>
+                    <p>Looks perfect on desktop, tablet, and mobile. Automatic breakpoint handling.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                        </svg>
+                    </div>
+                    <h3>Smooth Animations</h3>
+                    <p>GPU-accelerated transitions with customizable timing. Buttery smooth 60fps.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                            <path d="M22 6l-10 7L2 6" />
+                        </svg>
+                    </div>
+                    <h3>Grid View Toggle</h3>
+                    <p>Switch between 3D carousel and grid layout. Users choose their preferred view.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customization Section -->
+    <section id="customize" class="section customize-section">
+        <div class="container">
+            <div class="customize-grid">
+                <div class="customize-content">
+                    <h2>Complete Control</h2>
+                    <p>Every aspect of the carousel is customizable through an intuitive admin panel. No coding
+                        required.</p>
+
+                    <div class="customize-tabs">
+                        <button class="tab-btn active" data-tab="colors">Colors</button>
+                        <button class="tab-btn" data-tab="dimensions">Dimensions</button>
+                        <button class="tab-btn" data-tab="effects">3D Effects</button>
+                        <button class="tab-btn" data-tab="animation">Animation</button>
+                    </div>
+
+                    <div class="tab-content active" id="colors-tab">
+                        <ul class="settings-list">
+                            <li><span class="setting-dot" style="--color: #4f46e5"></span> Primary Color</li>
+                            <li><span class="setting-dot" style="--color: #4338ca"></span> Hover Color</li>
+                            <li><span class="setting-dot" style="--color: rgba(0,0,0,0.5)"></span> Overlay Color</li>
+                            <li><span class="setting-dot" style="--color: #ffffff"></span> Text Colors</li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="dimensions-tab">
+                        <ul class="settings-list">
+                            <li>📐 Card Width & Height</li>
+                            <li>📐 Border Radius</li>
+                            <li>📐 Grid Gap</li>
+                            <li>📐 Container Padding</li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="effects-tab">
+                        <ul class="settings-list">
+                            <li>🎯 Perspective Depth</li>
+                            <li>🎯 Rotation Angle</li>
+                            <li>🎯 Side Card Blur</li>
+                            <li>🎯 Z-Axis Offset</li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="animation-tab">
+                        <ul class="settings-list">
+                            <li>⚡ Transition Speed</li>
+                            <li>⚡ Auto-slide Delay</li>
+                            <li>⚡ Easing Function</li>
+                            <li>⚡ Hover Pause</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="customize-preview">
+                    <div class="code-window">
+                        <div class="code-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="code-title">shortcode.php</span>
+                        </div>
+                        <pre class="code-content"><code><span class="code-comment">// Basic usage</span>
+[modern_portfolio]
+
+<span class="code-comment">// With customization</span>
+[modern_portfolio 
+    <span class="code-attr">primary_color</span>=<span class="code-string">"#e74c3c"</span>
+    <span class="code-attr">card_width</span>=<span class="code-string">"600"</span>
+    <span class="code-attr">perspective</span>=<span class="code-string">"1000"</span>
+    <span class="code-attr">auto_slide</span>=<span class="code-string">"true"</span>
+]</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section steps-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Up and Running in Minutes</h2>
+                <p>Simple setup, powerful results</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Install Plugin</h3>
+                    <p>Upload to WordPress and activate. No configuration needed to start.</p>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Add Projects</h3>
+                    <p>Create portfolio items with images, videos, and descriptions in the admin panel.</p>
+                </div>
+
+                <div class="step-connector"></div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Display</h3>
+                    <p>Add <code>[modern_portfolio]</code> shortcode to any page or post. Done!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="docs" class="section docs-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Documentation</h2>
+                <p>Everything you need to get the most out of the plugin</p>
+            </div>
+
+            <div class="docs-grid">
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">📖</div>
+                    <h3>Getting Started</h3>
+                    <p>Installation, basic setup, and your first portfolio</p>
+                </a>
+
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">🎨</div>
+                    <h3>Customization</h3>
+                    <p>Colors, dimensions, effects, and CSS variables</p>
+                </a>
+
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">🎬</div>
+                    <h3>Video Support</h3>
+                    <p>YouTube, Vimeo, and self-hosted video embedding</p>
+                </a>
+
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">⚡</div>
+                    <h3>Shortcode Reference</h3>
+                    <p>All attributes and per-instance overrides</p>
+                </a>
+
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">🔧</div>
+                    <h3>Developer Guide</h3>
+                    <p>Hooks, filters, and extending the plugin</p>
+                </a>
+
+                <a href="#" class="doc-card">
+                    <div class="doc-icon">❓</div>
+                    <h3>FAQ</h3>
+                    <p>Common questions and troubleshooting</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Showcase Your Work?</h2>
+                <p>Download the plugin and create stunning portfolio presentations in minutes.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary btn-lg">
+                        Download Free
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com/your-repo" class="btn btn-outline btn-lg" target="_blank">
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">◈</span>
+                        Modern Portfolio
+                    </a>
+                    <p>A beautiful 3D carousel plugin for WordPress portfolios.</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Plugin</h4>
+                        <a href="#features">Features</a>
+                        <a href="#demo">Demo</a>
+                        <a href="#docs">Documentation</a>
+                        <a href="#">Changelog</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <a href="#">Developer Handbook</a>
+                        <a href="#">CSS 3D Tutorial</a>
+                        <a href="#">Support</a>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <a href="#">GitHub</a>
+                        <a href="#">Twitter</a>
+                        <a href="#">Contact</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Orcta Technologies. Built with ❤️ for WordPress.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
