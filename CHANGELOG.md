@@ -5,6 +5,32 @@ All notable changes to the Modern Portfolio Showcase plugin will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-01-08
+
+### Added
+- **Settings Page**: New admin settings page (Portfolio → Settings) with tabbed interface
+- **CSS Variables**: All styles now use CSS custom properties for easy theming
+- **Color Customization**: Primary color, hover color, overlay, text colors
+- **Dimension Controls**: Card width/height, border radius, grid gap
+- **3D Effect Tuning**: Perspective, rotation angle, blur levels (side/far cards)
+- **Animation Settings**: Transition speed, auto-slide delay, enable/disable auto-slide
+- **Display Toggles**: Show/hide title bar, play button, nav buttons, view toggle
+- **Shortcode Attributes**: Override settings per shortcode instance
+- **Settings Reset**: One-click reset to defaults
+
+### Changed
+- Updated card title to always-visible title bar at bottom of cards
+- Moved "View Details" button to bottom-right corner on hover
+- Play button now shows on hover for all slides (not just active)
+- Hover overlay is now semi-transparent with pointer-events passthrough
+- JavaScript CONFIG now reads from WordPress settings
+
+### Technical
+- New `Portfolio_Settings` class for settings management
+- CSS variables generated dynamically from PHP settings
+- Settings passed to JavaScript via `wp_localize_script`
+- All hardcoded colors/sizes replaced with CSS variables
+
 ## [2.0.0] - 2026-01-08
 
 ### Added

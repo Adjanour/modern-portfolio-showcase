@@ -27,10 +27,17 @@
     let autoSlideInterval = null;  // Auto-slide timer reference
     let isAutoSlideEnabled = true; // Auto-slide toggle state
 
-    // Configuration
+    // Configuration - get from WordPress settings or use defaults
     const CONFIG = {
-        autoSlideDelay: 5000,      // Time between auto-slides (ms)
-        transitionDuration: 600,   // CSS transition duration (ms)
+        autoSlideDelay: (typeof portfolioAjax !== 'undefined' && portfolioAjax.settings) 
+            ? portfolioAjax.settings.autoSlideDelay 
+            : 5000,
+        transitionDuration: (typeof portfolioAjax !== 'undefined' && portfolioAjax.settings) 
+            ? portfolioAjax.settings.transitionDuration 
+            : 600,
+        autoSlideEnabled: (typeof portfolioAjax !== 'undefined' && portfolioAjax.settings) 
+            ? portfolioAjax.settings.autoSlideEnabled 
+            : true,
     };
 
     /* ===========================================
@@ -123,32 +130,8 @@
             }
         });
 
-        // Update caption
-        updateCaption();
-
-        // Update dot navigation
-        updateDots();
-
         // Stop any playing media when slide changes
         stopAllMedia();
-    }
-
-    /**
-     * Update the caption text below carousel
-     */
-    function updateCaption() {
-        const $activeSlide = $('.carousel-slide.active');
-        const title = $activeSlide.data('title') || '';
-        $('#active-project-title').text(title);
-    }
-
-    /**
-     * Update dot navigation active state
-     */
-    function updateDots() {
-        const $dots = $('.carousel-dot');
-        $dots.removeClass('active');
-        $dots.eq(currentSlide).addClass('active');
     }
 
     /**
@@ -193,13 +176,6 @@
             e.preventDefault();
             e.stopPropagation();
             showSlide(currentSlide + 1);
-            restartAutoSlide();
-        });
-
-        // Dot navigation
-        $('.carousel-dots').on('click', '.carousel-dot', function() {
-            const index = $(this).data('index');
-            showSlide(index);
             restartAutoSlide();
         });
 
@@ -353,7 +329,8 @@
      * Start automatic slide advancement
      */
     function startAutoSlide() {
-        if (!isAutoSlideEnabled) return;
+        // Check both the runtime flag and the settings flag
+        if (!isAutoSlideEnabled || !CONFIG.autoSlideEnabled) return;
 
         stopAutoSlide(); // Clear any existing timer
         autoSlideInterval = setInterval(function() {
@@ -375,7 +352,7 @@
      * Restart auto-slide timer (called after user interaction)
      */
     function restartAutoSlide() {
-        if (!isAutoSlideEnabled) return;
+        if (!isAutoSlideEnabled || !CONFIG.autoSlideEnabled) return;
         startAutoSlide();
     }
 
@@ -418,7 +395,7 @@
 
         // AJAX request for project details
         $.ajax({
-            url: portfolioAjax.ajaxurl,
+            url: portfolioAjax.ajax_url,
             type: 'POST',
             data: {
                 action: 'load_project_details',
@@ -430,6 +407,8 @@
                     $modal.html(response.data.html);
                     initModalCarousel();
                 } else {
+                    // console log
+                    console.error('Error loading project details:', response); 
                     $modal.html('<div class="project-modal-content"><div style="padding:50px;">Error loading project details.</div></div>');
                 }
             },

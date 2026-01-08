@@ -2,8 +2,10 @@
  * Modern Portfolio Showcase - Frontend Styles
  * 
  * Clean, refactored version with only active styles
+ * Uses CSS variables for customization (set via Portfolio_Settings)
  * 
  * Table of Contents:
+ * 0. CSS Variables (Defaults)
  * 1. Base Container Styles
  * 2. View Toggle Buttons
  * 3. 3D Carousel - Container & Wrapper
@@ -16,6 +18,38 @@
  * 10. Project Modal
  * 11. Utility Classes
  */
+
+/* ===========================================
+   0. CSS VARIABLES (DEFAULTS)
+   These can be overridden via inline styles from settings
+   =========================================== */
+
+:root {
+    /* Colors */
+    --portfolio-primary: #4f46e5;
+    --portfolio-primary-hover: #4338ca;
+    --portfolio-overlay: rgba(0, 0, 0, 0.6);
+    --portfolio-text: #ffffff;
+    --portfolio-title-bg: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    
+    /* Dimensions */
+    --portfolio-card-width: 680px;
+    --portfolio-card-height: 400px;
+    --portfolio-border-radius: 16px;
+    
+    /* 3D Effect */
+    --portfolio-perspective: 1200px;
+    --portfolio-rotate-angle: 35deg;
+    --portfolio-blur-side: 1px;
+    --portfolio-blur-far: 2px;
+    
+    /* Animation */
+    --portfolio-transition: 600ms;
+    
+    /* Grid */
+    --portfolio-grid-columns: 3;
+    --portfolio-grid-gap: 30px;
+}
 
 /* ===========================================
    1. BASE CONTAINER STYLES
@@ -69,12 +103,12 @@
 
 .simple-toggle-btn:hover {
     background: rgba(79, 70, 229, 0.1);
-    color: #4f46e5;
+    color: var(--portfolio-primary);
     transform: scale(1.05);
 }
 
 .simple-toggle-btn.active {
-    background: #4f46e5;
+    background: var(--portfolio-primary);
     color: white;
     box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
 }
@@ -108,7 +142,7 @@
     justify-content: center;
     align-items: center;
     height: 520px;
-    perspective: 1200px;
+    perspective: var(--portfolio-perspective);
     perspective-origin: 50% 50%;
     padding: 20px 60px;
     overflow: visible;
@@ -146,15 +180,15 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 680px;                                    /* Base width - modify for larger/smaller cards */
-    height: 400px;                                   /* Base height */
-    transform: translate(-50%, -50%) scale(0.5);     /* Default: centered & scaled down */
+    width: var(--portfolio-card-width);
+    height: var(--portfolio-card-height);
+    transform: translate(-50%, -50%) scale(0.5);
     transform-style: preserve-3d;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all var(--portfolio-transition) cubic-bezier(0.23, 1, 0.32, 1);
     cursor: pointer;
-    border-radius: 16px;
+    border-radius: var(--portfolio-border-radius);
     overflow: visible;
-    opacity: 0;                                      /* Hidden by default */
+    opacity: 0;
     pointer-events: none;
 }
 
@@ -162,87 +196,85 @@
 .carousel-slide .slide-card {
     width: 100%;
     height: 100%;
-    border-radius: 16px;
+    border-radius: var(--portfolio-border-radius);
     overflow: hidden;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     background: #fff;
-    transition: box-shadow 0.6s ease, filter 0.6s ease;
+    transition: box-shadow var(--portfolio-transition) ease, filter var(--portfolio-transition) ease;
 }
 
-/* Title overlay at bottom of non-active slides */
-.carousel-slide .slide-overlay {
+/* Title bar at bottom of card - always visible */
+.carousel-slide .slide-title-bar {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 15px 20px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
-    color: #fff;
-    transition: opacity 0.3s ease;
-    opacity: 1;
+    background: var(--portfolio-title-bg);
+    color: var(--portfolio-text);
     z-index: 4;
 }
 
-.carousel-slide .slide-overlay h3 {
-    font-size: 1em;
+.carousel-slide .slide-title-bar h3 {
+    font-size: 1.1em;
     margin: 0;
     font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* Hover overlay for non-active slides */
+/* Hover overlay - covers entire card on hover */
 .carousel-slide .slide-hover-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--portfolio-overlay);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-end;
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 5;
+    z-index: 10;
     padding: 20px;
-    text-align: center;
+    text-align: left;
+    border-radius: var(--portfolio-border-radius);
+    pointer-events: none;
 }
 
-/* Only show hover overlay on non-active slides */
-.carousel-slide:not(.active):hover .slide-hover-overlay {
+/* Show hover overlay on all slides when hovered */
+.carousel-slide:hover .slide-hover-overlay {
     opacity: 1;
 }
 
-.carousel-slide .slide-hover-overlay h3 {
-    color: #fff;
-    font-size: 1.3em;
-    margin: 0 0 10px 0;
-    font-weight: 600;
-}
-
+/* Hide hover overlay title and description (we have title bar now) */
+.carousel-slide .slide-hover-overlay h3,
 .carousel-slide .slide-hover-overlay p {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.9em;
-    margin: 0 0 20px 0;
-    line-height: 1.5;
+    display: none;
 }
 
 .carousel-slide .slide-hover-overlay .slide-hover-btn {
-    padding: 10px 24px;
-    background: #4f46e5;
-    color: #fff;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    padding: 10px 20px;
+    background: var(--portfolio-primary);
+    color: var(--portfolio-text);
     border: none;
     border-radius: 8px;
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-slide .slide-hover-overlay .slide-hover-btn:hover {
-    background: #4338ca;
+    background: var(--portfolio-primary-hover);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* ===========================================
@@ -264,46 +296,38 @@
 
 /* FAR LEFT - prev-2 */
 .carousel-slide.prev-2 {
-    transform: translate(-50%, -50%) translateX(-400px) translateZ(-500px) rotateY(35deg);
+    transform: translate(-50%, -50%) translateX(-400px) translateZ(-500px) rotateY(var(--portfolio-rotate-angle));
     z-index: 10;
     opacity: 1;
     pointer-events: auto;
 }
 
 .carousel-slide.prev-2 .slide-card {
-    filter: blur(2px);
+    filter: blur(var(--portfolio-blur-far));
     box-shadow: 0 0px 35px rgba(0, 0, 0, 0.25);
-}
-
-.carousel-slide.prev-2 .slide-overlay {
-    opacity: 1;
 }
 
 /* LEFT - prev-1 */
 .carousel-slide.prev-1 {
-    transform: translate(-50%, -50%) translateX(-200px) translateZ(-400px) rotateY(35deg);
+    transform: translate(-50%, -50%) translateX(-200px) translateZ(-400px) rotateY(var(--portfolio-rotate-angle));
     z-index: 30;
     opacity: 1;
     pointer-events: auto;
-    transition: transform 500ms, opacity 500ms, visibility 500ms;
+    transition: transform var(--portfolio-transition), opacity var(--portfolio-transition), visibility var(--portfolio-transition);
 }
 
 .carousel-slide.prev-1 .slide-card {
-    filter: blur(1px);
+    filter: blur(var(--portfolio-blur-side));
     box-shadow: 0 0px 45px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-slide.prev-1 .slide-overlay {
-    opacity: 1;
 }
 
 /* CENTER - Active slide */
 .carousel-slide.active {
-    transform: translate(-50%, -50%) translateX(0)  rotateY(0deg);
+    transform: translate(-50%, -50%) translateX(0) rotateY(0deg);
     z-index: 100;
     opacity: 1;
     pointer-events: auto;
-    transition: transform 500ms, opacity 500ms, visibility 500ms;
+    transition: transform var(--portfolio-transition), opacity var(--portfolio-transition), visibility var(--portfolio-transition);
 }
 
 .carousel-slide.active .slide-card {
@@ -311,44 +335,32 @@
     
 }
 
-.carousel-slide.active .slide-overlay {
-    opacity: 0;  /* Hide title overlay on active slide */
-}
-
 /* RIGHT - next-1 */
 .carousel-slide.next-1 {
-    transform: translate(-50%, -50%) translateX(200px) translateZ(-400px) rotateY(-35deg);
+    transform: translate(-50%, -50%) translateX(200px) translateZ(-400px) rotateY(calc(var(--portfolio-rotate-angle) * -1));
     z-index: 30;
     opacity: 1;
     pointer-events: auto;
-    transition: transform 500ms, opacity 500ms, visibility 500ms;
+    transition: transform var(--portfolio-transition), opacity var(--portfolio-transition), visibility var(--portfolio-transition);
 }
 
 .carousel-slide.next-1 .slide-card {
-    filter: blur(1px);
+    filter: blur(var(--portfolio-blur-side));
     box-shadow: 0 0px 45px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-slide.next-1 .slide-overlay {
-    opacity: 1;
 }
 
 /* FAR RIGHT - next-2 */
 .carousel-slide.next-2 {
-    transform: translate(-50%, -50%) translateX(400px) translateZ(-500px) rotateY(-35deg);
+    transform: translate(-50%, -50%) translateX(400px) translateZ(-500px) rotateY(calc(var(--portfolio-rotate-angle) * -1));
     z-index: 10;
     opacity: 1;
     pointer-events: auto;
-    transition: transform 500ms, opacity 500ms, visibility 500ms;
+    transition: transform var(--portfolio-transition), opacity var(--portfolio-transition), visibility var(--portfolio-transition);
 }
 
 .carousel-slide.next-2 .slide-card {
-    filter: blur(2px);
+    filter: blur(var(--portfolio-blur-far));
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-}
-
-.carousel-slide.next-2 .slide-overlay {
-    opacity: 1;
 }
 
 /* Hidden slides (not in visible range) */
@@ -369,7 +381,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: var(--portfolio-border-radius);
 }
 
 /* Thumbnail image */
@@ -397,14 +409,14 @@
     opacity: 0;
     transition: all 0.3s ease;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    z-index: 10;
+    z-index: 15;
 }
 
 .slide-play-btn svg {
     width: 28px;
     height: 28px;
     margin-left: 4px;
-    color: #4f46e5;
+    color: var(--portfolio-primary);
 }
 
 .slide-play-btn:hover {
@@ -412,8 +424,9 @@
     background: #fff;
 }
 
-/* Show play button on active slide */
-.carousel-slide.active .slide-play-btn {
+/* Show play button on active slide or when hovered */
+.carousel-slide.active .slide-play-btn,
+.carousel-slide:hover .slide-play-btn {
     opacity: 1;
 }
 
@@ -503,62 +516,19 @@
     right: calc(50% - 340px - 70px);
 }
 
-/* Caption below carousel */
-.carousel-caption {
-    text-align: center;
-    margin-top: 20px;
-    padding: 15px 30px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.carousel-caption h3 {
-    font-size: 1.2em;
-    margin: 0;
-    font-weight: 600;
-    color: #333;
-}
-
-/* Dot navigation */
-.carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.carousel-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 0;
-}
-
-.carousel-dot.active {
-    background: #4f46e5;
-    transform: scale(1.3);
-    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
-}
-
-.carousel-dot:hover {
-    background: rgba(79, 70, 229, 0.5);
-}
-
 /* ===========================================
    8. 3D CAROUSEL - RESPONSIVE
+   
+   Responsive transforms use same system as main position classes:
+   - translateX: Horizontal offset
+   - translateZ: Depth (negative = further back)
+   - rotateY: 3D rotation angle
    =========================================== */
 
 @media (max-width: 1400px) {
     .carousel-3d-container {
         padding: 20px 30px;
+        perspective: 1100px;
     }
 
     .carousel-slide {
@@ -567,21 +537,19 @@
     }
 
     .carousel-slide.prev-1 {
-        transform: translate(-50%, -50%) translateX(-340px) scale(0.65) rotateY(32deg);
+        transform: translate(-50%, -50%) translateX(-180px) translateZ(-350px) rotateY(32deg);
     }
 
     .carousel-slide.next-1 {
-        transform: translate(-50%, -50%) translateX(340px) scale(0.65) rotateY(-32deg);
+        transform: translate(-50%, -50%) translateX(180px) translateZ(-350px) rotateY(-32deg);
     }
 
     .carousel-slide.prev-2 {
-        transform: translate(-50%, -50%) translateX(-450px) scale(0.5) rotateY(42deg);
-        opacity: 0.5;
+        transform: translate(-50%, -50%) translateX(-350px) translateZ(-450px) rotateY(38deg);
     }
 
     .carousel-slide.next-2 {
-        transform: translate(-50%, -50%) translateX(450px) scale(0.5) rotateY(-42deg);
-        opacity: 0.5;
+        transform: translate(-50%, -50%) translateX(350px) translateZ(-450px) rotateY(-38deg);
     }
 
     .carousel-nav-prev {
@@ -594,17 +562,21 @@
 }
 
 @media (max-width: 1200px) {
+    .carousel-3d-container {
+        perspective: 1000px;
+    }
+
     .carousel-slide {
         width: 480px;
         height: 300px;
     }
 
     .carousel-slide.prev-1 {
-        transform: translate(-50%, -50%) translateX(-280px) scale(0.6) rotateY(30deg);
+        transform: translate(-50%, -50%) translateX(-160px) translateZ(-320px) rotateY(30deg);
     }
 
     .carousel-slide.next-1 {
-        transform: translate(-50%, -50%) translateX(280px) scale(0.6) rotateY(-30deg);
+        transform: translate(-50%, -50%) translateX(160px) translateZ(-320px) rotateY(-30deg);
     }
 
     /* Hide far slides on smaller screens */
@@ -626,6 +598,7 @@
 @media (max-width: 992px) {
     .carousel-3d-container {
         height: 450px;
+        perspective: 900px;
     }
 
     .carousel-slide {
@@ -634,13 +607,21 @@
     }
 
     .carousel-slide.prev-1 {
-        transform: translate(-50%, -50%) translateX(-220px) scale(0.55) rotateY(28deg);
-        opacity: 0.75;
+        transform: translate(-50%, -50%) translateX(-140px) translateZ(-280px) rotateY(28deg);
+        opacity: 0.85;
+    }
+
+    .carousel-slide.prev-1 .slide-card {
+        filter: blur(1px);
     }
 
     .carousel-slide.next-1 {
-        transform: translate(-50%, -50%) translateX(220px) scale(0.55) rotateY(-28deg);
-        opacity: 0.75;
+        transform: translate(-50%, -50%) translateX(140px) translateZ(-280px) rotateY(-28deg);
+        opacity: 0.85;
+    }
+
+    .carousel-slide.next-1 .slide-card {
+        filter: blur(1px);
     }
 
     .carousel-nav-prev {
@@ -656,6 +637,7 @@
     .carousel-3d-container {
         height: 380px;
         padding: 15px 10px;
+        perspective: 800px;
     }
 
     .carousel-slide {
@@ -664,13 +646,21 @@
     }
 
     .carousel-slide.prev-1 {
-        transform: translate(-50%, -50%) translateX(-160px) scale(0.5) rotateY(25deg);
-        opacity: 0.65;
+        transform: translate(-50%, -50%) translateX(-120px) translateZ(-250px) rotateY(25deg);
+        opacity: 0.75;
+    }
+
+    .carousel-slide.prev-1 .slide-card {
+        filter: blur(1px);
     }
 
     .carousel-slide.next-1 {
-        transform: translate(-50%, -50%) translateX(160px) scale(0.5) rotateY(-25deg);
-        opacity: 0.65;
+        transform: translate(-50%, -50%) translateX(120px) translateZ(-250px) rotateY(-25deg);
+        opacity: 0.75;
+    }
+
+    .carousel-slide.next-1 .slide-card {
+        filter: blur(1px);
     }
 
     .carousel-slide.prev-2,
@@ -714,6 +704,66 @@
     }
 }
 
+@media (max-width: 480px) {
+    .carousel-3d-container {
+        height: 320px;
+        perspective: 700px;
+    }
+
+    .carousel-slide {
+        width: 260px;
+        height: 170px;
+    }
+
+    .carousel-slide.active {
+        transform: translate(-50%, -50%) translateX(0) translateZ(0) rotateY(0deg);
+    }
+
+    .carousel-slide.prev-1 {
+        transform: translate(-50%, -50%) translateX(-100px) translateZ(-200px) rotateY(22deg);
+        opacity: 0.6;
+    }
+
+    .carousel-slide.next-1 {
+        transform: translate(-50%, -50%) translateX(100px) translateZ(-200px) rotateY(-22deg);
+        opacity: 0.6;
+    }
+
+    /* Hide all except active and immediate neighbors */
+    .carousel-slide.prev-2,
+    .carousel-slide.next-2 {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .carousel-nav-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .carousel-nav-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .carousel-nav-prev {
+        left: 10px;
+    }
+
+    .carousel-nav-next {
+        right: 10px;
+    }
+
+    .carousel-dots {
+        gap: 8px;
+    }
+
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
 /* ===========================================
    9. GRID VIEW
    =========================================== */
@@ -721,7 +771,7 @@
 .grid-view {
     display: none;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 30px;
+    gap: var(--portfolio-grid-gap);
 }
 
 .grid-view.active {
@@ -730,7 +780,7 @@
 
 .portfolio-grid-item {
     position: relative;
-    border-radius: 12px;
+    border-radius: var(--portfolio-border-radius);
     overflow: hidden;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
@@ -804,8 +854,8 @@
 /* CTA Buttons */
 .portfolio-cta {
     padding: 10px 16px;
-    background: #4f46e5;
-    color: white;
+    background: var(--portfolio-primary);
+    color: var(--portfolio-text);
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -817,7 +867,7 @@
 }
 
 .portfolio-cta:hover {
-    background: #4338ca;
+    background: var(--portfolio-primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }

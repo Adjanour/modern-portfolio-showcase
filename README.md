@@ -57,57 +57,41 @@ modern-portfolio-showcase/
 
 ### Carousel Card Sizes
 
-Edit `assets/css/frontend-clean.css`:
+Navigate to **Portfolio → Settings** in the WordPress admin to access the customization panel.
+
+### Settings Tabs
+
+| Tab | Options |
+|-----|---------|
+| **Colors** | Primary color, hover color, overlay color, text colors |
+| **Dimensions** | Card width/height, border radius, grid gap |
+| **3D Effect** | Perspective, rotation angle, blur levels |
+| **Animation** | Transition speed, auto-slide delay, enable/disable |
+| **Display** | Show/hide title bar, play button, nav buttons, view toggle |
+
+### Shortcode Overrides
+
+Override settings per shortcode instance:
+
+```php
+[modern_portfolio primary_color="#e74c3c" card_width="600" auto_slide="false"]
+```
+
+### CSS Variables
+
+The plugin uses CSS custom properties that can also be overridden manually:
 
 ```css
-/* Base card dimensions (Section 4) */
-.carousel-slide {
-    width: 680px;     /* Card width */
-    height: 400px;    /* Card height */
+:root {
+    --portfolio-primary: #4f46e5;
+    --portfolio-primary-hover: #4338ca;
+    --portfolio-card-width: 680px;
+    --portfolio-card-height: 400px;
+    --portfolio-border-radius: 12px;
+    --portfolio-perspective: 1200px;
+    --portfolio-rotate-angle: 35deg;
+    --portfolio-transition: 0.6s;
 }
-
-/* Side card scaling (Section 5) */
-.carousel-slide.prev-1 {
-    transform: translate(-50%, -50%) translateX(-400px) scale(0.7) rotateY(35deg);
-    /*                                                   ↑ Scale: 0.7 = 70% size */
-}
-```
-
-### 3D Effect Depth
-
-```css
-/* Container perspective (Section 3) */
-.carousel-3d-container {
-    perspective: 1200px;  /* Lower = more dramatic 3D */
-}
-
-/* Card rotation angle */
-.carousel-slide.prev-1 {
-    transform: ... rotateY(35deg);  /* Higher = more angled */
-}
-```
-
-### Auto-Slide Timing
-
-Edit `assets/js/frontend-clean.js`:
-
-```javascript
-// Configuration section
-const CONFIG = {
-    autoSlideDelay: 5000,  // 5 seconds between slides
-};
-```
-
-### Colors
-
-```css
-/* Primary accent color */
-.simple-toggle-btn.active,
-.portfolio-cta,
-.carousel-dot.active {
-    background: #4f46e5;  /* Indigo */
-}
-```
 
 
 ## Development
@@ -133,6 +117,7 @@ const CONFIG = {
 | `Portfolio_Admin` | Admin menus, pages |
 | `Portfolio_Ajax` | AJAX handlers |
 | `Portfolio_Frontend` | Shortcode, asset loading |
+| `Portfolio_Settings` | Settings management, CSS variables |
 
 ### Adding Custom Fields
 
@@ -153,11 +138,11 @@ See [docs/3d-carousel-tutorial.md](docs/3d-carousel-tutorial.md) for:
 
 | Class | Position | Transform |
 |-------|----------|-----------|
-| `.active` | Center | `scale(1) rotateY(0)` |
-| `.prev-1` | Left | `translateX(-400px) scale(0.7) rotateY(35deg)` |
-| `.prev-2` | Far Left | `translateX(-520px) scale(0.55) rotateY(45deg)` |
-| `.next-1` | Right | `translateX(400px) scale(0.7) rotateY(-35deg)` |
-| `.next-2` | Far Right | `translateX(520px) scale(0.55) rotateY(-45deg)` |
+| `.active` | Center | `translateZ(0) rotateY(0)` |
+| `.prev-1` | Left | `translateX(-400px) translateZ(-100px) rotateY(35deg)` |
+| `.prev-2` | Far Left | `translateX(-520px) translateZ(-200px) rotateY(45deg)` |
+| `.next-1` | Right | `translateX(400px) translateZ(-100px) rotateY(-35deg)` |
+| `.next-2` | Far Right | `translateX(520px) translateZ(-200px) rotateY(-45deg)` |
 
 
 ## Browser Support
@@ -176,4 +161,4 @@ Orcta Technologies
 
 ## Version
 
-2.0.0
+2.1.0

@@ -114,18 +114,20 @@ modern-portfolio-showcase/
 │   ├── class-portfolio-database.php # Database operations
 │   ├── class-portfolio-admin.php    # Admin pages & menus
 │   ├── class-portfolio-ajax.php     # AJAX handlers
-│   └── class-portfolio-frontend.php # Shortcode & frontend
+│   ├── class-portfolio-frontend.php # Shortcode & frontend
+│   └── class-portfolio-settings.php # Settings management
 │
 ├── templates/                       # PHP templates (display only)
 │   ├── frontend-portfolio.php       # Portfolio display
 │   ├── admin-dashboard.php          # Admin dashboard
 │   ├── admin-categories.php         # Category management
 │   ├── admin-projects-list.php      # Project listing
-│   └── admin-project-edit.php       # Add/edit project form
+│   ├── admin-project-edit.php       # Add/edit project form
+│   └── admin-settings.php           # Settings page
 │
 ├── assets/                          # Frontend assets
 │   ├── css/
-│   │   └── frontend-clean.css       # Portfolio styles
+│   │   └── frontend-clean.css       # Portfolio styles (uses CSS variables)
 │   └── js/
 │       └── frontend-clean.js        # Carousel & interactions
 │
@@ -346,6 +348,52 @@ class Portfolio_Frontend {
 **Shortcode:**
 ```php
 add_shortcode('modern_portfolio', array($this, 'portfolio_shortcode'));
+```
+
+### Portfolio_Settings
+
+Manages plugin settings and CSS variable generation.
+
+```php
+// Location: includes/class-portfolio-settings.php
+
+class Portfolio_Settings {
+    
+    // Get all settings (merged with defaults)
+    public static function get_settings()
+    
+    // Save settings to database
+    public static function save($settings)
+    
+    // Reset to defaults
+    public static function reset()
+    
+    // Generate inline CSS variables
+    public static function generate_css_variables()
+    
+    // Get settings for JavaScript
+    public static function get_js_settings()
+}
+```
+
+**Settings Categories:**
+| Category | Options |
+|----------|---------|
+| Colors | `primary_color`, `primary_hover`, `overlay_color`, `text_color`, `text_secondary` |
+| Dimensions | `card_width`, `card_height`, `border_radius`, `grid_gap` |
+| 3D Effect | `perspective`, `rotate_angle`, `blur_side`, `blur_far` |
+| Animation | `transition_speed`, `auto_slide_delay`, `auto_slide_enabled` |
+| Display | `show_title_bar`, `show_play_button`, `show_nav_buttons`, `show_view_toggle` |
+
+**Usage:**
+```php
+// Get a setting
+$settings = Portfolio_Settings::get_settings();
+$primary = $settings['primary_color'];
+
+// Generate CSS variables for inline output
+$css = Portfolio_Settings::generate_css_variables();
+wp_add_inline_style('portfolio-frontend', $css);
 ```
 
 
