@@ -11,8 +11,6 @@ A WordPress portfolio plugin featuring a 3D coverflow carousel, grid view, and v
 - **Responsive Design**: Mobile-friendly layouts
 - **Easy Management**: Intuitive admin interface
 
----
-
 ## Quick Start
 
 ### Installation
@@ -29,8 +27,6 @@ Add this shortcode to any page:
 ```
 [modern_portfolio]
 ```
-
----
 
 ## File Structure
 
@@ -56,8 +52,6 @@ modern-portfolio-showcase/
 │   └── 3d-carousel-tutorial.md   # Carousel customization guide
 └── modern-portfolio-showcase.php # Main plugin file
 ```
-
----
 
 ## Customization
 
@@ -115,7 +109,6 @@ const CONFIG = {
 }
 ```
 
----
 
 ## Development
 
@@ -148,8 +141,6 @@ const CONFIG = {
 3. **Save Handler**: Update `class-portfolio-ajax.php`
 4. **Display**: Use in `templates/frontend-portfolio.php`
 
----
-
 ## Carousel Deep Dive
 
 See [docs/3d-carousel-tutorial.md](docs/3d-carousel-tutorial.md) for:
@@ -168,14 +159,12 @@ See [docs/3d-carousel-tutorial.md](docs/3d-carousel-tutorial.md) for:
 | `.next-1` | Right | `translateX(400px) scale(0.7) rotateY(-35deg)` |
 | `.next-2` | Far Right | `translateX(520px) scale(0.55) rotateY(-45deg)` |
 
----
 
 ## Browser Support
 
 - Chrome, Firefox, Safari, Edge (latest versions)
 - iOS Safari, Android Chrome
 
----
 
 ## License
 

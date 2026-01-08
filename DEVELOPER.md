@@ -25,31 +25,31 @@ Complete technical documentation for developers working on the Modern Portfolio 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     WordPress Environment                        │
-│                                                                  │
+│                     WordPress Environment                       │
+│                                                                 │
 │  ┌────────────────────────────────────────────────────────────┐ │
-│  │           modern-portfolio-showcase.php                     │ │
-│  │                    (Entry Point)                            │ │
-│  │                                                             │ │
-│  │  • Plugin registration & activation                         │ │
-│  │  • Requires all class files                                 │ │
-│  │  • Initializes Modern_Portfolio_Plugin                      │ │
-│  └──────────────────────┬──────────────────────────────────────┘ │
-│                         │                                        │
-│                         ▼                                        │
+│  │           modern-portfolio-showcase.php                    │ │
+│  │                    (Entry Point)                           │ │
+│  │                                                            │ │
+│  │  • Plugin registration & activation                        │ │
+│  │  • Requires all class files                                │ │
+│  │  • Initializes Modern_Portfolio_Plugin                     │ │
+│  └──────────────────────┬─────────────────────────────────────┘ │
+│                         │                                       │
+│                         ▼                                       │
 │  ┌────────────────────────────────────────────────────────────┐ │
-│  │              Modern_Portfolio_Plugin                        │ │
-│  │                  (Main Controller)                          │ │
-│  │                                                             │ │
-│  │  Instantiates:                                              │ │
-│  │  ├── Portfolio_Database  (data layer)                       │ │
-│  │  ├── Portfolio_Admin     (admin UI)                         │ │
-│  │  ├── Portfolio_Ajax      (API endpoints)                    │ │
-│  │  └── Portfolio_Frontend  (public display)                   │ │
-│  └──────────────────────┬──────────────────────────────────────┘ │
-│                         │                                        │
+│  │              Modern_Portfolio_Plugin                       │ │
+│  │                  (Main Controller)                         │ │
+│  │                                                            │ │
+│  │  Instantiates:                                             │ │
+│  │  ├── Portfolio_Database  (data layer)                      │ │
+│  │  ├── Portfolio_Admin     (admin UI)                        │ │
+│  │  ├── Portfolio_Ajax      (API endpoints)                   │ │
+│  │  └── Portfolio_Frontend  (public display)                  │ │
+│  └──────────────────────┬─────────────────────────────────────┘ │
+│                         │                                       │
 │         ┌───────────────┼───────────────┬───────────────┐       │
-│         ▼               ▼               ▼               ▼       │
+│         ▼              ▼               ▼              ▼       │
 │  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
 │  │  Database  │  │   Admin    │  │    AJAX    │  │  Frontend  │ │
 │  │            │  │            │  │            │  │            │ │
@@ -57,7 +57,7 @@ Complete technical documentation for developers working on the Modern Portfolio 
 │  │ • Schema   │  │ • Pages    │  │ • Delete   │  │ • Assets   │ │
 │  │ • Queries  │  │ • Assets   │  │ • Get data │  │ • Template │ │
 │  └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
-│                                                                  │
+│                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -68,7 +68,6 @@ Complete technical documentation for developers working on the Modern Portfolio 
 3. **Asset Isolation**: Admin and frontend assets are separate
 4. **WordPress Standards**: Uses WP APIs for database, AJAX, enqueuing
 
----
 
 ## Setup & Installation
 
@@ -150,7 +149,7 @@ modern-portfolio-showcase/
 | `frontend-*.php` | Public templates |
 | `*-clean.css/js` | Refactored production assets |
 
----
+
 
 ## Data Flow
 
@@ -246,7 +245,6 @@ CSS transitions animate changes
          └──► 0.6s cubic-bezier easing
 ```
 
----
 
 ## PHP Classes
 
@@ -350,7 +348,6 @@ class Portfolio_Frontend {
 add_shortcode('modern_portfolio', array($this, 'portfolio_shortcode'));
 ```
 
----
 
 ## Frontend Architecture
 
@@ -421,27 +418,26 @@ The carousel uses CSS 3D transforms with 5 visible positions:
 
 ```
                     VIEWPORT
-    ┌───────────────────────────────────────┐
-    │                                       │
+    ┌────────────────────────────────────────────┐
+    │                                            │
     │   [prev-2]  [prev-1]  [ACTIVE]  [next-1]  [next-2]
     │      ↖         ↑         ●         ↑         ↗
     │       \        |         |         |        /
     │        \       |    z-index:100    |       /
     │         \      |         |         |      /
-    │    z:10  \  z:30        ▼       z:30  / z:10
-    │           \    |   Full size    |    /
-    │            \   |   No blur     |   /
-    │             \  |   No rotate   |  /
-    │              \ |               | /
-    │               \|               |/
+    │    z:10  \  z:30        ▼       z:30    z:10
+    │           \    |   Full size       |    /
+    │            \   |   No blur         |   /
+    │             \  |   No rotate       |  /
+    │              \ |                   | /
+    │               \|                   |/
     │        rotateY(35°)     rotateY(-35°)
     │        blur(1-2px)       blur(1-2px)
     │        translateZ(-400 to -500px)
-    │                                       │
-    └───────────────────────────────────────┘
+    │                                         │
+    └─────────────────────────────────────────┘
 ```
 
----
 
 ## Database Schema
 
@@ -483,8 +479,6 @@ $items = $wpdb->get_results("
     ORDER BY p.created_at DESC
 ");
 ```
-
----
 
 ## AJAX Endpoints
 
@@ -539,8 +533,6 @@ $.ajax({
     }
 }
 ```
-
----
 
 ## Extending the Plugin
 
@@ -612,7 +604,6 @@ else if (videoType === 'tiktok') {
 }
 ```
 
----
 
 ## Debugging
 
@@ -660,8 +651,6 @@ document.querySelectorAll('.carousel-slide').forEach((s, i) => {
 error_log(print_r($_POST, true));
 ```
 
----
-
 ## Quick Reference
 
 ### Key Files to Edit
@@ -688,7 +677,6 @@ add_action('wp_ajax_*', ...)            // AJAX handlers
 add_shortcode('modern_portfolio', ...)  // Register shortcode
 ```
 
----
 
 ## Resources
 
